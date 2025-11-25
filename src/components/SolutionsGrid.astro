@@ -1,0 +1,125 @@
+---
+// Define the data for the four solution cards
+import { ChartColumnBig, Package, Lightbulb, Link } from "@lucide/astro";
+const solutions = [
+    {
+        iconColor: "bg-blue-100 text-blue-600",
+        icon: ChartColumnBig,
+        title: "Sales Tracking",
+        description:
+            "Log sales fast, see what’s selling, and watch your numbers move in real time.",
+    },
+    {
+        iconColor: "bg-green-100 text-green-600",
+        icon: Package,
+        title: "Inventory Control",
+        description:
+            "Know your stock instantly, prevent shortages, and keep products accurately recorded.",
+    },
+    {
+        iconColor: "bg-gray-800 text-gray-50",
+        icon: Lightbulb,
+        title: "Business Insights",
+        description:
+            "See your key numbers at a glance and spot trends before they cost you money.",
+    },
+    {
+        iconColor: "bg-red-100 text-red-600",
+        icon: Link,
+        title: "Staff & Operations",
+        description:
+            "Manage teams, assign roles, and run multiple store locations from one dashboard.",
+    },
+];
+---
+
+<section id="features" class="py-8 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+            class="grid
+            gap-8 /* Spacing between cards */
+            sm:grid-cols-2 /* 2 columns on small screens */
+            lg:grid-cols-4 /* 4 columns on large screens (desktop) */"
+        >
+            {
+                solutions.map((solution) => (
+                    // <div class="
+                    //     bg-white
+                    //     p-6 md:p-8
+                    //     rounded-xl
+                    //     border border-gray-100
+                    //     shadow-xs hover:shadow-xl transition duration-300
+                    //     text-center
+                    // ">
+                    //     <div class={`
+                    //         w-14 h-14 mx-auto mb-4
+                    //         flex items-center justify-center
+                    //         rounded-xl
+                    //         ${solution.iconColor}
+                    //     `}>
+                    //         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    //             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={solution.icon}></path>
+                    //         </svg>
+                    //     </div>
+
+                    //     <h3 class="text-xl font-semibold text-gray-900 mb-3">
+                    //         {solution.title}
+                    //     </h3>
+
+                    //     <p class="text-sm text-gray-500 leading-relaxed">
+                    //         {solution.description}
+                    //     </p>
+                    // </div>
+
+                    <div
+                        class={`
+                                bg-white 
+                                p-4 md:p-10 
+                                rounded-2xl 
+                                border-[0.5px] border-[#2C2C2C3A]
+                                text-left
+                                relative 
+                                overflow-hidden
+                            `}
+                    >
+                        <div
+                            class="
+                                absolute top-0 left-0 
+                                w-20 h-20  
+                                bg-blue-50 
+                                rounded-br-[30px] 
+                                flex items-center justify-center 
+                                p-4"
+                        >
+                            {/* <svg
+                                class="w-7 h-7 stroke-blue-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d={solution.icon}
+                                />
+                            </svg> */}
+                            {/* <ChartColumnBig class="w-7 h-7 stroke-blue-500" /> */}
+                            <solution.icon class="w-[24px] h-[24px] stroke-blue-500" />
+                        </div>
+
+                        <div class="pt-24">
+                            <h3 class="text-[18px] text-gray-900 mb-2 font-semibold text-lg sm:text-2xl text-textb">
+                                {solution.title}
+                            </h3>
+                            <p class="text-base text-stone-500 sm:text-lg font-medium leading-relaxed">
+                                {solution.description}
+                            </p>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
