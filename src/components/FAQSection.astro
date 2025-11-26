@@ -1,0 +1,78 @@
+---
+// Define the FAQ data
+const faqData = [
+    {
+        q: 'How does your consulting process work?',
+        a: 'Our process involves an initial assessment, system setup, staff training, and continuous technical support to ensure a smooth transition and long-term success.',
+    },
+    {
+        q: 'Who is Jarabiz for?',
+        a: 'Jarabiz is designed for a variety of businesses including restaurants, cafes, e-commerce sellers, retail stores, and wholesale distributors who need integrated sales and inventory management.',
+    },
+    {
+        q: 'Is Jarabiz easy to use?',
+        a: 'Yes, the platform is built with an intuitive UI and UX, requiring minimal technical training for staff to start managing sales, inventory, and reports effectively.',
+    },
+    {
+        q: 'Does Jarabiz integrate with my existing equipment?',
+        a: 'Jarabiz is compatible with most standard POS hardware, including modern printers, scanners, and cash registers. Specific compatibility details can be confirmed during setup.',
+    },
+    {
+        q: 'What kind of report does Jarabiz generate?',
+        a: 'We generate daily/weekly sales summaries, inventory stock reports, customer purchase trends, and staff performance reports, all exportable anytime.',
+    },
+    {
+        q: 'How much does Jarabiz cost?',
+        a: 'We offer a free Basic Plan for all users. Custom pricing is available for large enterprises requiring advanced features or extensive support.',
+    },
+];
+---
+
+<section id="faq" class="py-16 md:py-24 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-12 text-center">
+            FAQ
+        </h2>
+
+        <div class="space-y-0.5">
+            {faqData.map((item, index) => (
+                <div class="
+                    collapse collapse-plus w-full 
+                    bg-white text-gray-800 
+                    border-b border-gray-200 
+                    rounded-none 
+                    first:border-t
+                ">
+                    <input 
+                        type="radio" 
+                        name="jarabiz-faq-accordion" 
+                        checked={index === 0} 
+                        aria-labelledby={`faq-q-${index}`}
+                    />
+                    
+                    <div 
+                        id={`faq-q-${index}`}
+                        class="
+                            collapse-title 
+                            text-lg md:text-xl font-medium 
+                            py-5 md:py-6 
+                            pl-0 pr-10
+                            hover:bg-gray-50 transition duration-150
+                            
+                            /* CUSTOM ICON STYLING */
+                            relative before:!bg-blue-600 before:!rounded-md before:!w-4 before:!h-4
+                        "
+                    >
+                        {item.q}
+                    </div>
+
+                    <div class="collapse-content text-base text-gray-600 py-3 pl-0 pr-4">
+                        <p>{item.a}</p>
+                    </div>
+                </div>
+            ))}
+        </div>
+
+    </div>
+</section>

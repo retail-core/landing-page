@@ -1,37 +1,78 @@
-<div class="carousel rounded-box rounded-box w-full space-x-4 p-4">
-  <div class="carousel-item">
-    <img
-      src="https://img.daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.webp"
-      alt="Burger" />
-  </div>
-  <div class="carousel-item">
-    <img
-      src="https://img.daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.webp"
-      alt="Burger" />
-  </div>
-  <div class="carousel-item">
-    <img
-      src="https://img.daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.webp"
-      alt="Burger" />
-  </div>
-  <div class="carousel-item">
-    <img
-      src="https://img.daisyui.com/images/stock/photo-1494253109108-2e30c049369b.webp"
-      alt="Burger" />
-  </div>
-  <div class="carousel-item">
-    <img
-      src="https://img.daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.webp"
-      alt="Burger" />
-  </div>
-  <div class="carousel-item">
-    <img
-      src="https://img.daisyui.com/images/stock/photo-1559181567-c3190ca9959b.webp"
-      alt="Burger" />
-  </div>
-  <div class="carousel-item">
-    <img
-      src="https://img.daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.webp"
-      alt="Burger" />
-  </div>
-</div>
+---
+import { Image } from 'astro:assets';
+
+// Data for the carousel cards
+const audienceData = [
+    {
+        title: 'Restaurants & Cafes',
+        description: 'Keep your kitchen stocked, reduce waste, and track what sells best.',
+        imagePath: "../assets/images/restaurant.webp", // Placeholder image path
+    },
+    {
+        title: 'E-commerce Sellers',
+        description: 'Sync your online stock, manage orders, and avoid overselling.',
+        imagePath: "../assets/images/ecommerce.webp",
+    },
+    {
+        title: 'Retail Stores',
+        description: 'Track every item, manage shelves, and stay in control—even across multiple branches.',
+        imagePath: "../assets/images/retail.webp",
+    },
+    {
+        title: 'Wholesale Distributors',
+        description: 'Manage bulk orders, track shipping, and handle complex pricing structures easily.',
+        imagePath: "../assets/images/wholesale.webp",
+    },
+];
+
+// NOTE: Please ensure you have the necessary placeholder images in your src/assets folder.
+import RestaurantImage from '../assets/images/taud-cafe.png'; 
+import EcommerceImage from '../assets/images/taud-ecommerce.png';
+import RetailImage from '../assets/images/taud-retailstore.png';
+import WholesaleImage from '../assets/images/taud-cafe.png';
+
+const imageMap = [RestaurantImage, EcommerceImage, RetailImage, WholesaleImage];
+---
+
+
+
+<section id="target-audience" class="py-16 md:py-24 bg-gray-50 px-4">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
+            Jarabiz for everyone
+        </h2>
+    </div>
+
+    <div class="carousel rounded-box rounded-box w-full space-x-4 px-4">
+        {audienceData.map((item, index) => (
+                <div 
+                    id={`card-${index}`}
+                    class={`
+                        carousel-item
+                        w-[320px] h-[290px] md:w-[400px] md:h-[500px]
+                        relative rounded-[24px] overflow-hidden
+                    `}
+                    data-index={index}
+                >
+                    <Image
+                        quality={100}
+                        src={imageMap[index]} 
+                        alt={item.title}
+                        width={650}
+                        height={750}
+                        class="w-full h-full object-cover"
+                    />
+
+                      <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
+
+                    
+                    <div class="absolute inset-0  flex items-end p-6">
+                        <div class="text-white">
+                            <h3 class="text-2xl font-semibold mb-1">{item.title}</h3>
+                            <p class="text-sm">{item.description}</p>
+                        </div>
+                    </div>
+                </div>
+            ))}
+    </div>
+</section>

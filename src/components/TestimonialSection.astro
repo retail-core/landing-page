@@ -1,0 +1,63 @@
+---
+// Define the testimonial data in the frontmatter
+const testimonial = {
+    rating: 4.9,
+    quote: 'Within a week, we were live selling online. The order management system is intuitive, helping us serve customers faster and more efficiently.',
+    name: 'Tunde Adeyemi',
+    title: 'Manager at Urban Eats Café',
+};
+
+// Function to generate the star rating SVG/HTML
+function renderStars(rating: number) {
+    // Round to the nearest 0.5 for accurate representation
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+    const stars = [];
+    // Full stars
+    for (let i = 0; i < fullStars; i++) {
+        stars.push('<span class="text-yellow-400">★</span>');
+    }
+    // Half star
+    if (hasHalfStar) {
+        // Using a half-star Unicode character or custom SVG is cleaner, 
+        // but a simple full star with a different color is quicker/cleaner for Tailwind:
+        stars.push('<span class="text-yellow-400 opacity-50">★</span>'); 
+    }
+    // Empty stars
+    for (let i = 0; i < emptyStars; i++) {
+        stars.push('<span class="text-gray-300">★</span>');
+    }
+
+    return stars.join('');
+}
+---
+
+<section id="testimonial" class="py-20 md:py-32 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+        <figure>
+            <div class="flex justify-center items-center space-x-2 mb-6 md:mb-8">
+                <div class="text-3xl" aria-label={`Rated ${testimonial.rating} out of 5 stars`}>
+                    <Fragment set:html={renderStars(testimonial.rating)} />
+                </div>
+                <span class="text-lg font-medium text-gray-700">Rated {testimonial.rating}/5</span>
+            </div>
+
+            <blockquote class="text-2xl md:text-3xl font-normal leading-relaxed text-gray-900 mx-auto max-w-3xl">
+                &ldquo;{testimonial.quote}&rdquo;
+            </blockquote>
+
+            <figcaption class="mt-8 md:mt-10">
+                <p class="text-xl font-semibold text-gray-900">
+                    {testimonial.name}
+                </p>
+                <p class="text-base text-gray-500 mt-1">
+                    {testimonial.title}
+                </p>
+            </figcaption>
+        </figure>
+
+    </div>
+</section>
