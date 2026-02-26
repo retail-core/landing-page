@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JaraBiz - Track Everything</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet">
+<style>
+body {
+font-family: 'Urbanist', sans-serif;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+background-color: #000000;
+}
+* {
+outline: none !important;
+}
+/* Smooth Transitions */
+.feature-tab {
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.feature-preview {
+transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+opacity: 0;
+transform: translateY(20px) scale(0.98);
+position: absolute;
+inset: 0;
+pointer-events: none;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.feature-preview.active {
+opacity: 1;
+transform: translateY(0) scale(1);
+z-index: 10;
+}
+/* Hide Scrollbars */
+.no-scrollbar::-webkit-scrollbar {
+display: none;
+}
+.no-scrollbar {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+/* Glassmorphism for phone screens */
+.glass-panel {
+background: rgba(255, 255, 255, 0.95);
+backdrop-filter: blur(20px);
+}
+/* Animation utilities */
+.fade-in-up {
+animation: fadeInUp 0.5s ease-out forwards;
+}
+@keyframes fadeInUp {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+</style>
+<style>
+/* 3D Transform utilities */
+.rotate-x-0 { --tw-rotate-x: 0deg; transform: translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0)) rotateX(var(--tw-rotate-x, 0)) rotateY(var(--tw-rotate-y, 0)) rotateZ(var(--tw-rotate-z, 0)) skewX(var(--tw-skew-x, 0)) skewY(var(--tw-skew-y, 0)) scaleX(var(--tw-scale-x, 1)) scaleY(var(--tw-scale-y, 1)) !important; }
+.rotate-y-0 { --tw-rotate-y: 0deg; transform: translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0)) rotateX(var(--tw-rotate-x, 0)) rotateY(var(--tw-rotate-y, 0)) rotateZ(var(--tw-rotate-z, 0)) skewX(var(--tw-skew-x, 0)) skewY(var(--tw-skew-y, 0)) scaleX(var(--tw-scale-x, 1)) scaleY(var(--tw-scale-y, 1)) !important; }
+.perspective-normal { perspective: 500px !important; }
+.perspective-distant { perspective: 1200px !important; }
+.transform-style-preserve-3d { transform-style: preserve-3d !important; }
+</style>
+<script>
+// Configure Tailwind to include our custom 3D transform utilities
+tailwind.config = {
+theme: {
+extend: {
+// Add any custom theme extensions here if needed
+}
+},
+plugins: [
+function({ addUtilities }) {
+const rotateXUtilities = {};
+const rotateYUtilities = {};
+const rotateZUtilities = {};
+const rotateValues = [0, 5, 10, 15, 20, 30, 45, 75];
+// Generate rotate-x utilities
+rotateValues.forEach((value) => {
+rotateXUtilities[`.rotate-x-${value}`] = {
+'--tw-rotate-x': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateXUtilities[`.-rotate-x-${value}`] = {
+'--tw-rotate-x': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+// Generate rotate-y utilities
+rotateValues.forEach((value) => {
+rotateYUtilities[`.rotate-y-${value}`] = {
+'--tw-rotate-y': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateYUtilities[`.-rotate-y-${value}`] = {
+'--tw-rotate-y': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+// Generate rotate-z utilities
+rotateValues.forEach((value) => {
+rotateZUtilities[`.rotate-z-${value}`] = {
+'--tw-rotate-z': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateZUtilities[`.-rotate-z-${value}`] = {
+'--tw-rotate-z': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+// Perspective utilities
+const perspectiveUtilities = {
+".perspective-none": { perspective: "none" },
+".perspective-dramatic": { perspective: "100px" },
+".perspective-near": { perspective: "300px" },
+".perspective-normal": { perspective: "500px" },
+".perspective-midrange": { perspective: "800px" },
+".perspective-distant": { perspective: "1200px" },
+};
+// Transform style utilities
+const transformStyleUtilities = {
+".transform-style-preserve-3d": { "transform-style": "preserve-3d" },
+".transform-style-flat": { "transform-style": "flat" },
+};
+addUtilities({
+...rotateXUtilities,
+...rotateYUtilities,
+...rotateZUtilities,
+...perspectiveUtilities,
+...transformStyleUtilities,
+});
+}
+]
+};
+</script>
+<style>
+/* Disable animations during code generation */
+*, *::before, *::after {
+animation-duration: 0s !important;
+animation-delay: 0s !important;
+transition-duration: 0s !important;
+transition-delay: 0s !important;
+scroll-behavior: auto !important;
+animation: none !important;
+}
+/* Disable CSS transforms that might be animated */
+@media (prefers-reduced-motion: reduce) {
+*, *::before, *::after {
+animation-duration: 0.01ms !important;
+animation-iteration-count: 1 !important;
+transition-duration: 0.01ms !important;
+}
+}
+/* Override opacity-0 class during generation to keep elements visible */
+.opacity-0 {
+opacity: 1 !important;
+}
+/* Disable classes with "animate" in their name */
+[class*="animate"] {
+animation: none !important;
+animation-duration: 0s !important;
+animation-delay: 0s !important;
+animation-iteration-count: 1 !important;
+animation-fill-mode: none !important;
+opacity: 1 !important;
+filter: none !important;
+-webkit-filter: none !important;
+backdrop-filter: none !important;
+-webkit-backdrop-filter: none !important;
+}
+/* Override inline opacity: 0 for animation-related elements */
+[class*="animation"][style*="opacity: 0"],
+[class*="animation"][style*="opacity:0"],
+[class*="reveal"][style*="opacity: 0"],
+[class*="reveal"][style*="opacity:0"],
+[class*="fade"][style*="opacity: 0"],
+[class*="fade"][style*="opacity:0"],
+[class*="Fade"][style*="opacity: 0"],
+[class*="Fade"][style*="opacity:0"],
+[class*="slide"][style*="opacity: 0"],
+[class*="slide"][style*="opacity:0"],
+[class*="Slide"][style*="opacity: 0"],
+[class*="Slide"][style*="opacity:0"] {
+opacity: 1 !important;
+}
+/* Handle Tailwind opacity-0 class with animation-related classes */
+[class*="animation"].opacity-0,
+[class*="reveal"].opacity-0,
+[class*="fade"].opacity-0,
+[class*="Fade"].opacity-0,
+[class*="slide"].opacity-0,
+[class*="Slide"].opacity-0 {
+opacity: 1 !important;
+}
+/* Hide Spline embeds during generation */
+spline-viewer,
+[data-spline],
+iframe[src*="spline.design"],
+iframe[src*="my.spline.design"],
+embed[src*="spline.design"],
+embed[src*="my.spline.design"],
+object[data*="spline.design"],
+object[data*="my.spline.design"] {
+display: none !important;
+visibility: hidden !important;
+}
+</style>
+<script>
+(function() {
+// Store original methods to restore later
+const originalRequestAnimationFrame = window.requestAnimationFrame;
+const originalSetTimeout = window.setTimeout;
+const originalSetInterval = window.setInterval;
+const originalGetContext = HTMLCanvasElement.prototype.getContext;
+// Disable requestAnimationFrame during loading
+window.requestAnimationFrame = function(callback) {
+// Return a fake ID and don't execute the callback
+return -1;
+};
+// Disable setTimeout for short intervals (likely animations)
+window.setTimeout = function(callback, delay) {
+// Only disable short timeouts that are likely animations
+if (delay < 100) {
+return -1;
+}
+return originalSetTimeout.apply(this, arguments);
+};
+// Disable setInterval (likely animations)
+window.setInterval = function(callback, delay) {
+// Disable all intervals during loading
+return -1;
+};
+// Disable canvas rendering
+HTMLCanvasElement.prototype.getContext = function(contextType, contextAttributes) {
+const context = originalGetContext.call(this, contextType, contextAttributes);
+if (!context) return context;
+// For 2D context, override drawing methods
+if (contextType === '2d') {
+const originalMethods = {};
+const drawingMethods = [
+'clearRect', 'fillRect', 'strokeRect', 'fillText', 'strokeText',
+'drawImage', 'putImageData', 'fill', 'stroke', 'arc', 'arcTo',
+'beginPath', 'closePath', 'lineTo', 'moveTo', 'quadraticCurveTo',
+'bezierCurveTo', 'rect', 'ellipse'
+];
+drawingMethods.forEach(method => {
+if (typeof context[method] === 'function') {
+originalMethods[method] = context[method];
+context[method] = function() {
+// Do nothing - disable drawing during loading
+return this;
+};
+}
+});
+// Store original methods for potential restoration
+context._originalMethods = originalMethods;
+}
+// For WebGL context, override key methods
+else if (contextType === 'webgl' || contextType === 'webgl2' || contextType === 'experimental-webgl') {
+const originalMethods = {};
+const webglMethods = [
+'clear', 'drawArrays', 'drawElements', 'useProgram', 'bindBuffer',
+'bindTexture', 'bindFramebuffer', 'viewport', 'enable', 'disable'
+];
+webglMethods.forEach(method => {
+if (typeof context[method] === 'function') {
+originalMethods[method] = context[method];
+context[method] = function() {
+// Do nothing - disable WebGL operations during loading
+return this;
+};
+}
+});
+// Store original methods for potential restoration
+context._originalMethods = originalMethods;
+}
+return context;
+};
+// Disable Three.js specific functionality
+const disableThreeJS = function() {
+// Wait for Three.js to potentially load
+setTimeout(() => {
+if (typeof THREE !== 'undefined') {
+// Override Three.js WebGLRenderer render method
+if (THREE.WebGLRenderer) {
+const originalRender = THREE.WebGLRenderer.prototype.render;
+THREE.WebGLRenderer.prototype.render = function() {
+// Do nothing - disable rendering during loading
+return this;
+};
+THREE.WebGLRenderer.prototype._originalRender = originalRender;
+}
+// Override Animation Mixer
+if (THREE.AnimationMixer) {
+const originalUpdate = THREE.AnimationMixer.prototype.update;
+THREE.AnimationMixer.prototype.update = function() {
+// Do nothing - disable animations during loading
+return this;
+};
+THREE.AnimationMixer.prototype._originalUpdate = originalUpdate;
+}
+}
+}, 100);
+};
+// Apply Three.js disabling
+disableThreeJS();
+// Disable Spline functionality during loading
+const disableSpline = function() {
+// Hide any existing spline viewers immediately
+const hideSplineElements = () => {
+const splineSelectors = [
+'spline-viewer',
+'[data-spline]',
+'iframe[src*="spline.design"]',
+'iframe[src*="my.spline.design"]',
+'embed[src*="spline.design"]',
+'embed[src*="my.spline.design"]',
+'object[data*="spline.design"]',
+'object[data*="my.spline.design"]'
+];
+splineSelectors.forEach(selector => {
+const elements = document.querySelectorAll(selector);
+elements.forEach(el => {
+el.style.display = 'none';
+el.style.visibility = 'hidden';
+});
+});
+};
+// Hide existing elements immediately
+hideSplineElements();
+// Monitor for new spline elements being added
+const observer = new MutationObserver(hideSplineElements);
+// Ensure document.body is available before observing
+if (document.body instanceof Node) {
+observer.observe(document.body, {
+childList: true,
+subtree: true,
+attributes: true,
+attributeFilter: ['src', 'data']
+});
+}
+// Disable Spline runtime if it exists
+if (typeof window.Spline !== 'undefined') {
+const originalSpline = window.Spline;
+window.Spline = function() {
+// Do nothing - disable Spline initialization during loading
+return {
+load: () => Promise.resolve(),
+setSize: () => {},
+dispose: () => {},
+play: () => {},
+pause: () => {},
+stop: () => {}
+};
+};
+window.Spline._originalSpline = originalSpline;
+}
+// Prevent new Spline instances from being created
+Object.defineProperty(window, 'Spline', {
+set: function(value) {
+// Store original but don't activate during loading
+window._SplineOriginal = value;
+},
+get: function() {
+// Return dummy implementation during loading
+return function() {
+return {
+load: () => Promise.resolve(),
+setSize: () => {},
+dispose: () => {},
+play: () => {},
+pause: () => {},
+stop: () => {}
+};
+};
+},
+configurable: true
+});
+};
+// Apply Spline disabling
+disableSpline();
+// Store restoration function globally (though we don't restore in this loading context)
+window._restoreCanvasAndAnimations = function() {
+window.requestAnimationFrame = originalRequestAnimationFrame;
+window.setTimeout = originalSetTimeout;
+window.setInterval = originalSetInterval;
+HTMLCanvasElement.prototype.getContext = originalGetContext;
+// Restore Three.js if available
+if (typeof THREE !== 'undefined') {
+if (THREE.WebGLRenderer && THREE.WebGLRenderer.prototype._originalRender) {
+THREE.WebGLRenderer.prototype.render = THREE.WebGLRenderer.prototype._originalRender;
+}
+if (THREE.AnimationMixer && THREE.AnimationMixer.prototype._originalUpdate) {
+THREE.AnimationMixer.prototype.update = THREE.AnimationMixer.prototype._originalUpdate;
+}
+}
+// Restore Spline if available
+if (window._SplineOriginal) {
+window.Spline = window._SplineOriginal;
+} else if (window.Spline && window.Spline._originalSpline) {
+window.Spline = window.Spline._originalSpline;
+}
+// Restore visibility of Spline elements
+const splineSelectors = [
+'spline-viewer',
+'[data-spline]',
+'iframe[src*="spline.design"]',
+'iframe[src*="my.spline.design"]',
+'embed[src*="spline.design"]',
+'embed[src*="my.spline.design"]',
+'object[data*="spline.design"]',
+'object[data*="my.spline.design"]'
+];
+splineSelectors.forEach(selector => {
+const elements = document.querySelectorAll(selector);
+elements.forEach(el => {
+el.style.display = '';
+el.style.visibility = '';
+});
+});
+};
+})();
+</script>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.inset-x-4{left:1rem;right:1rem}.inset-x-0{left:0px;right:0px}.-bottom-px{bottom:-1px}.top-0{top:0px}.-left-\[10\%\]{left:-10%}.-right-\[10\%\]{right:-10%}.-top-\[10\%\]{top:-10%}.left-1\/2{left:50%}.top-24{top:6rem}.top-\[20\%\]{top:20%}.bottom-0{bottom:0px}.left-0{left:0px}.right-0{right:0px}.left-5{left:1.25rem}.left-1{left:0.25rem}.top-1{top:0.25rem}.z-50{z-index:50}.z-10{z-index:10}.z-40{z-index:40}.-z-10{z-index:-10}.order-1{order:1}.order-2{order:2}.my-2{margin-top:0.5rem;margin-bottom:0.5rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-8{margin-bottom:2rem}.ml-auto{margin-left:auto}.mr-auto{margin-right:auto}.ml-1{margin-left:0.25rem}.mb-10{margin-bottom:2.5rem}.mb-12{margin-bottom:3rem}.mr-2{margin-right:0.5rem}.mb-16{margin-bottom:4rem}.mb-3{margin-bottom:0.75rem}.mb-20{margin-bottom:5rem}.mb-2{margin-bottom:0.5rem}.mb-6{margin-bottom:1.5rem}.mt-10{margin-top:2.5rem}.mt-2{margin-top:0.5rem}.mt-0\.5{margin-top:0.125rem}.-mr-3{margin-right:-0.75rem}.-mt-3{margin-top:-0.75rem}.mt-20{margin-top:5rem}.mt-3{margin-top:0.75rem}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-9{height:2.25rem}.h-px{height:1px}.h-2{height:0.5rem}.h-\[50\%\]{height:50%}.h-\[60\%\]{height:60%}.h-full{height:100%}.h-12{height:3rem}.h-\[52px\]{height:52px}.h-auto{height:auto}.h-10{height:2.5rem}.h-\[440px\]{height:440px}.h-6{height:1.5rem}.h-8{height:2rem}.h-\[400px\]{height:400px}.h-4{height:1rem}.max-h-full{max-height:100%}.min-h-\[500px\]{min-height:500px}.min-h-\[300px\]{min-height:300px}.w-9{width:2.25rem}.w-full{width:100%}.w-2{width:0.5rem}.w-\[50\%\]{width:50%}.w-\[60\%\]{width:60%}.w-\[90\%\]{width:90%}.w-\[52px\]{width:52px}.w-10{width:2.5rem}.w-px{width:1px}.w-14{width:3.5rem}.w-6{width:1.5rem}.w-\[600px\]{width:600px}.w-4{width:1rem}.min-w-\[170px\]{min-width:170px}.max-w-5xl{max-width:64rem}.max-w-2xl{max-width:42rem}.max-w-7xl{max-width:80rem}.max-w-\[340px\]{max-width:340px}.max-w-lg{max-width:32rem}.max-w-\[280px\]{max-width:280px}.max-w-\[320px\]{max-width:320px}.max-w-\[960px\]{max-width:960px}.max-w-3xl{max-width:48rem}.max-w-\[220px\]{max-width:220px}.max-w-md{max-width:28rem}.max-w-xl{max-width:36rem}.max-w-\[1140px\]{max-width:1140px}.max-w-full{max-width:100%}.max-w-6xl{max-width:72rem}.shrink-0{flex-shrink:0}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.\!translate-y-full{--tw-translate-y:100% !important;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important}.translate-x-0{--tw-translate-x:0px;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scale-100{--tw-scale-x:1;--tw-scale-y:1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scale-x-0{--tw-scale-x:0;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.list-none{list-style-type:none}.flex-row{flex-direction:row}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-16{gap:4rem}.gap-8{gap:2rem}.gap-1\.5{gap:0.375rem}.gap-x-16{column-gap:4rem}.gap-y-0{row-gap:0px}.gap-y-16{row-gap:4rem}.gap-x-4{column-gap:1rem}.gap-y-4{row-gap:1rem}.gap-x-6{column-gap:1.5rem}.gap-x-8{column-gap:2rem}.gap-y-6{row-gap:1.5rem}.gap-x-12{column-gap:3rem}.gap-x-3{column-gap:0.75rem}.gap-y-12{row-gap:3rem}.gap-y-3{row-gap:0.75rem}.gap-x-1{column-gap:0.25rem}.gap-x-2{column-gap:0.5rem}.gap-y-1{row-gap:0.25rem}.gap-y-2{row-gap:0.5rem}.gap-y-8{row-gap:2rem}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-x-5 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1.25rem * var(--tw-space-x-reverse));margin-left:calc(1.25rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.self-center{align-self:center}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-\[24px\]{border-radius:24px}.rounded-\[20px\]{border-radius:20px}.rounded-\[2rem\]{border-radius:2rem}.rounded-\[3\.5rem\]{border-radius:3.5rem}.rounded-xl{border-radius:0.75rem}.rounded-\[1\.7rem\]{border-radius:1.7rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-200\/60{border-color:rgb(226 232 240 / 0.6)}.border-blue-100{--tw-border-opacity:1;border-color:rgb(219 234 254 / var(--tw-border-opacity, 1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249 / var(--tw-border-opacity, 1))}.border-transparent{border-color:transparent}.border-white\/5{border-color:rgb(255 255 255 / 0.05)}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-\[\#2C56EA\]{--tw-bg-opacity:1;background-color:rgb(44 86 234 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/80{background-color:rgb(255 255 255 / 0.8)}.bg-blue-50\/50{background-color:rgb(239 246 255 / 0.5)}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-\[\#D0DEF5\]{--tw-bg-opacity:1;background-color:rgb(208 222 245 / var(--tw-bg-opacity, 1))}.bg-blue-500\/10{background-color:rgb(59 130 246 / 0.1)}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-\[\#000000\]{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-500\/5{background-color:rgb(59 130 246 / 0.05)}.bg-neutral-50{--tw-bg-opacity:1;background-color:rgb(250 250 250 / var(--tw-bg-opacity, 1))}.bg-neutral-900\/20{background-color:rgb(23 23 23 / 0.2)}.bg-slate-200{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.bg-transparent{background-color:transparent}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.bg-\[\#1B1B1B\]{--tw-bg-opacity:1;background-color:rgb(27 27 27 / var(--tw-bg-opacity, 1))}.bg-white\/5{background-color:rgb(255 255 255 / 0.05)}.bg-\[url\(https\:\/\/hoirqrkdgbmvpwutwuwj\.supabase\.co\/storage\/v1\/object\/public\/assets\/assets\/f79a2b8c-c34b-42e0-8787-66bb52186118_1600w\.png\)\]{background-image:url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f79a2b8c-c34b-42e0-8787-66bb52186118_1600w.png)}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.bg-gradient-to-bl{background-image:linear-gradient(to bottom left, var(--tw-gradient-stops))}.bg-gradient-to-tr{background-image:linear-gradient(to top right, var(--tw-gradient-stops))}.bg-gradient-to-b{background-image:linear-gradient(to bottom, var(--tw-gradient-stops))}.bg-\[url\(https\:\/\/hoirqrkdgbmvpwutwuwj\.supabase\.co\/storage\/v1\/object\/public\/assets\/assets\/2de94e58-c7ec-47e0-8070-58202f4186ad_800w\.png\)\]{background-image:url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2de94e58-c7ec-47e0-8070-58202f4186ad_800w.png)}.bg-\[url\(https\:\/\/hoirqrkdgbmvpwutwuwj\.supabase\.co\/storage\/v1\/object\/public\/assets\/assets\/8aa7ac19-c4ce-4a56-9010-ba4a05fc32ce_800w\.png\)\]{background-image:url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8aa7ac19-c4ce-4a56-9010-ba4a05fc32ce_800w.png)}.bg-\[url\(https\:\/\/hoirqrkdgbmvpwutwuwj\.supabase\.co\/storage\/v1\/object\/public\/assets\/assets\/ad581aa7-45f6-40d1-8f7f-ffb171207920_800w\.png\)\]{background-image:url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ad581aa7-45f6-40d1-8f7f-ffb171207920_800w.png)}.from-blue-500\/0{--tw-gradient-from:rgb(59 130 246 / 0) var(--tw-gradient-from-position);--tw-gradient-to:rgb(59 130 246 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-blue-100{--tw-gradient-from:#dbeafe var(--tw-gradient-from-position);--tw-gradient-to:rgb(219 234 254 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-100{--tw-gradient-from:#f3e8ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(243 232 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-transparent{--tw-gradient-from:transparent var(--tw-gradient-from-position);--tw-gradient-to:rgb(0 0 0 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-blue-500\/70{--tw-gradient-to:rgb(59 130 246 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(59 130 246 / 0.7) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-indigo-100{--tw-gradient-to:rgb(224 231 255 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #e0e7ff var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-pink-100{--tw-gradient-to:rgb(252 231 243 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #fce7f3 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-\[\#D0DEF5\]{--tw-gradient-to:rgb(208 222 245 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #D0DEF5 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-slate-200{--tw-gradient-to:rgb(226 232 240 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #e2e8f0 var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-blue-500\/0{--tw-gradient-to:rgb(59 130 246 / 0) var(--tw-gradient-to-position)}.to-transparent{--tw-gradient-to:transparent var(--tw-gradient-to-position)}.bg-cover{background-size:cover}.bg-center{background-position:center}.object-contain{object-fit:contain}.object-cover{object-fit:cover}.object-fill{object-fit:fill}.p-6{padding:1.5rem}.p-8{padding:2rem}.p-3\.5{padding:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.px-8{padding-left:2rem;padding-right:2rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pb-4{padding-bottom:1rem}.pl-4{padding-left:1rem}.pr-4{padding-right:1rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.pt-4{padding-top:1rem}.pb-24{padding-bottom:6rem}.pl-6{padding-left:1.5rem}.pr-6{padding-right:1.5rem}.pt-24{padding-top:6rem}.pb-6{padding-bottom:1.5rem}.pl-8{padding-left:2rem}.pr-8{padding-right:2rem}.pl-0{padding-left:0px}.pt-1{padding-top:0.25rem}.pb-10{padding-bottom:2.5rem}.pb-16{padding-bottom:4rem}.pb-8{padding-bottom:2rem}.pl-10{padding-left:2.5rem}.pr-10{padding-right:2.5rem}.pt-10{padding-top:2.5rem}.pt-16{padding-top:4rem}.pt-8{padding-top:2rem}.pb-3\.5{padding-bottom:0.875rem}.pt-3\.5{padding-top:0.875rem}.pb-0{padding-bottom:0px}.pb-12{padding-bottom:3rem}.pr-0{padding-right:0px}.pt-0{padding-top:0px}.pt-12{padding-top:3rem}.pt-6{padding-top:1.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-base{font-size:1rem;line-height:1.5rem}.text-5xl{font-size:3rem;line-height:1}.text-\[38px\]{font-size:38px}.text-2xl{font-size:1.5rem;line-height:2rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[10px\]{font-size:10px}.text-xs{font-size:0.75rem;line-height:1rem}.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-bold{font-weight:700}.font-light{font-weight:300}.font-normal{font-weight:400}.uppercase{text-transform:uppercase}.leading-\[1\.1\]{line-height:1.1}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-\[\#2c56ea\]{--tw-text-opacity:1;color:rgb(44 86 234 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-\[\#1B1B1B\]{--tw-text-opacity:1;color:rgb(27 27 27 / var(--tw-text-opacity, 1))}.text-\[\#2C56EA\]{--tw-text-opacity:1;color:rgb(44 86 234 / var(--tw-text-opacity, 1))}.text-\[\#2C2C2C\]{--tw-text-opacity:1;color:rgb(44 44 44 / var(--tw-text-opacity, 1))}.text-\[\#565656\]{--tw-text-opacity:1;color:rgb(86 86 86 / var(--tw-text-opacity, 1))}.text-\[\#979797\]{--tw-text-opacity:1;color:rgb(151 151 151 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-50{--tw-text-opacity:1;color:rgb(249 250 251 / var(--tw-text-opacity, 1))}.text-neutral-300{--tw-text-opacity:1;color:rgb(212 212 212 / var(--tw-text-opacity, 1))}.text-neutral-400{--tw-text-opacity:1;color:rgb(163 163 163 / var(--tw-text-opacity, 1))}.text-neutral-500{--tw-text-opacity:1;color:rgb(115 115 115 / var(--tw-text-opacity, 1))}.text-white\/90{color:rgb(255 255 255 / 0.9)}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-950{--tw-text-opacity:1;color:rgb(2 6 23 / var(--tw-text-opacity, 1))}.text-neutral-700{--tw-text-opacity:1;color:rgb(64 64 64 / var(--tw-text-opacity, 1))}.opacity-30{opacity:0.3}.opacity-0{opacity:0}.opacity-100{opacity:1}.\!opacity-0{opacity:0 !important}.opacity-50{opacity:0.5}.mix-blend-multiply{mix-blend-mode:multiply}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-blue-600\/20{--tw-shadow-color:rgb(37 99 235 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-slate-900\/10{--tw-shadow-color:rgb(15 23 42 / 0.1);--tw-shadow:var(--tw-shadow-colored)}.shadow-indigo-500\/30{--tw-shadow-color:rgb(99 102 241 / 0.3);--tw-shadow:var(--tw-shadow-colored)}.shadow-blue-900\/20{--tw-shadow-color:rgb(30 58 138 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-black\/20{--tw-shadow-color:rgb(0 0 0 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-blue-900\/10{--tw-shadow-color:rgb(30 58 138 / 0.1);--tw-shadow:var(--tw-shadow-colored)}.shadow-white\/5{--tw-shadow-color:rgb(255 255 255 / 0.05);--tw-shadow:var(--tw-shadow-colored)}.ring-1{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.ring-slate-900\/5{--tw-ring-color:rgb(15 23 42 / 0.05)}.ring-white\/5{--tw-ring-color:rgb(255 255 255 / 0.05)}.ring-black\/5{--tw-ring-color:rgb(0 0 0 / 0.05)}.blur-\[100px\]{--tw-blur:blur(100px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-\[120px\]{--tw-blur:blur(120px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-\[80px\]{--tw-blur:blur(80px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.grayscale{--tw-grayscale:grayscale(100%);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-xl{--tw-backdrop-blur:blur(24px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.\!transition-all{transition-property:all !important;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1) !important;transition-duration:150ms !important}.duration-300{transition-duration:300ms}.duration-700{transition-duration:700ms}.duration-150{transition-duration:150ms}.\!duration-\[700ms\]{transition-duration:700ms !important}.duration-200{transition-duration:200ms}.ease-out{transition-timing-function:cubic-bezier(0, 0, 0.2, 1)}.ease-in-out{transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1)}.\!ease-\[cubic-bezier\(0\.25\2c 1\2c 0\.5\2c 1\)\]{transition-timing-function:cubic-bezier(0.25,1,0.5,1) !important}.perspective-normal{perspective:500px}.perspective-distant{perspective:1200px}.transform-style-preserve-3d{transform-style:preserve-3d}.selection\:bg-white\/20 *::selection{background-color:rgb(255 255 255 / 0.2)}.selection\:bg-white\/20::selection{background-color:rgb(255 255 255 / 0.2)}.open\:ring-black\/10[open]{--tw-ring-color:rgb(0 0 0 / 0.1)}.hover\:scale-105:hover{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:scale-\[1\.02\]:hover{--tw-scale-x:1.02;--tw-scale-y:1.02;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:border-slate-300\/60:hover{border-color:rgb(203 213 225 / 0.6)}.hover\:border-blue-200:hover{--tw-border-opacity:1;border-color:rgb(191 219 254 / var(--tw-border-opacity, 1))}.hover\:border-slate-300:hover{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.hover\:bg-slate-50:hover{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-800:hover{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-50:hover{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-600:hover{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.hover\:bg-white\/10:hover{background-color:rgb(255 255 255 / 0.1)}.hover\:bg-white\/5:hover{background-color:rgb(255 255 255 / 0.05)}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.hover\:text-slate-900:hover{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.hover\:text-neutral-900:hover{--tw-text-opacity:1;color:rgb(23 23 23 / var(--tw-text-opacity, 1))}.hover\:shadow-md:hover{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-xl:hover{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-lg:hover{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-slate-200\/20:hover{--tw-shadow-color:rgb(226 232 240 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.hover\:shadow-slate-200\/50:hover{--tw-shadow-color:rgb(226 232 240 / 0.5);--tw-shadow:var(--tw-shadow-colored)}.hover\:rotate-x-0:hover{--tw-rotate-x:0deg;transform:translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))}.hover\:rotate-y-0:hover{--tw-rotate-y:0deg;transform:translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-slate-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(226 232 240 / var(--tw-ring-opacity, 1))}.focus\:ring-slate-900:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(15 23 42 / var(--tw-ring-opacity, 1))}.focus\:ring-offset-2:focus{--tw-ring-offset-width:2px}.focus-visible\:outline-none:focus-visible{outline:2px solid transparent;outline-offset:2px}.focus-visible\:ring-2:focus-visible{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus-visible\:ring-slate-900:focus-visible{--tw-ring-opacity:1;--tw-ring-color:rgb(15 23 42 / var(--tw-ring-opacity, 1))}.focus-visible\:ring-offset-2:focus-visible{--tw-ring-offset-width:2px}.active\:scale-\[0\.98\]:active{--tw-scale-x:0.98;--tw-scale-y:0.98;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group[open] .group-open\:rotate-180{--tw-rotate:180deg;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:scale-\[1\.02\]{--tw-scale-x:1.02;--tw-scale-y:1.02;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:scale-x-100{--tw-scale-x:1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:bg-blue-500\/20{background-color:rgb(59 130 246 / 0.2)}.group:hover .group-hover\:text-\[\#2C2C2C\]{--tw-text-opacity:1;color:rgb(44 44 44 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-\[\#2C56EA\]{--tw-text-opacity:1;color:rgb(44 86 234 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-neutral-200{--tw-text-opacity:1;color:rgb(229 229 229 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-neutral-300{--tw-text-opacity:1;color:rgb(212 212 212 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}}@media (min-width: 768px){.md\:col-span-1{grid-column:span 1 / span 1}.md\:col-span-2{grid-column:span 2 / span 2}.md\:flex{display:flex}.md\:hidden{display:none}.md\:max-w-full{max-width:100%}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:gap-16{gap:4rem}.md\:pb-0{padding-bottom:0px}.md\:pb-20{padding-bottom:5rem}.md\:pr-0{padding-right:0px}.md\:pt-0{padding-top:0px}.md\:text-left{text-align:left}.md\:text-6xl{font-size:3.75rem;line-height:1}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}.md\:text-\[40px\]{font-size:40px}.md\:text-5xl{font-size:3rem;line-height:1}}@media (min-width: 1024px){.lg\:order-1{order:1}.lg\:order-2{order:2}.lg\:mx-0{margin-left:0px;margin-right:0px}.lg\:-mt-4{margin-top:-1rem}.lg\:mb-4{margin-bottom:1rem}.lg\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-\[370px_1fr\]{grid-template-columns:370px 1fr}.lg\:items-stretch{align-items:stretch}.lg\:justify-start{justify-content:flex-start}.lg\:justify-end{justify-content:flex-end}.lg\:pl-0{padding-left:0px}.lg\:pb-12{padding-bottom:3rem}.lg\:pb-0{padding-bottom:0px}.lg\:pl-20{padding-left:5rem}.lg\:pr-0{padding-right:0px}.lg\:pt-0{padding-top:0px}.lg\:text-left{text-align:left}.lg\:text-7xl{font-size:4.5rem;line-height:1}.lg\:text-\[48px\]{font-size:48px}.lg\:text-6xl{font-size:3.75rem;line-height:1}}.\[\&\.active\]\:\!translate-y-0.active{--tw-translate-y:0px !important;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important}.\[\&\.active\]\:\!opacity-100.active{opacity:1 !important}</style><style id="aura-editor-visibility-style">
+.invisible { visibility: hidden !important; }
+</style><style id="cms-loading-styles">
+@keyframes cms-shimmer {
+0% { background-position: -200% 0; }
+100% { background-position: 200% 0; }
+}
+.cms-loading {
+position: relative;
+color: transparent !important;
+/* Override any background-image (inline styles, Tailwind bg-[url(...)]) */
+background-image: none !important;
+background-color: transparent !important;
+background: linear-gradient(90deg,
+rgba(128, 128, 128, 0.1) 25%,
+rgba(128, 128, 128, 0.2) 50%,
+rgba(128, 128, 128, 0.1) 75%
+) !important;
+background-size: 200% 100% !important;
+animation: cms-shimmer 1.5s infinite !important;
+border-radius: 12px;
+min-height: 1em;
+min-width: 3em;
+overflow: hidden;
+}
+.cms-loading * {
+visibility: hidden !important;
+}
+.cms-loading img {
+opacity: 0 !important;
+}
+</style>
+<style>
+/* Disable animations during code generation */
+*, *::before, *::after {
+animation-duration: 0s !important;
+animation-delay: 0s !important;
+transition-duration: 0s !important;
+transition-delay: 0s !important;
+scroll-behavior: auto !important;
+animation: none !important;
+}
+/* Disable CSS transforms that might be animated */
+@media (prefers-reduced-motion: reduce) {
+*, *::before, *::after {
+animation-duration: 0.01ms !important;
+animation-iteration-count: 1 !important;
+transition-duration: 0.01ms !important;
+}
+}
+/* Override opacity-0 class during generation to keep elements visible */
+.opacity-0 {
+opacity: 1 !important;
+}
+/* Disable classes with "animate" in their name */
+[class*="animate"] {
+animation: none !important;
+animation-duration: 0s !important;
+animation-delay: 0s !important;
+animation-iteration-count: 1 !important;
+animation-fill-mode: none !important;
+opacity: 1 !important;
+filter: none !important;
+-webkit-filter: none !important;
+backdrop-filter: none !important;
+-webkit-backdrop-filter: none !important;
+}
+/* Override inline opacity: 0 for animation-related elements */
+[class*="animation"][style*="opacity: 0"],
+[class*="animation"][style*="opacity:0"],
+[class*="reveal"][style*="opacity: 0"],
+[class*="reveal"][style*="opacity:0"],
+[class*="fade"][style*="opacity: 0"],
+[class*="fade"][style*="opacity:0"],
+[class*="Fade"][style*="opacity: 0"],
+[class*="Fade"][style*="opacity:0"],
+[class*="slide"][style*="opacity: 0"],
+[class*="slide"][style*="opacity:0"],
+[class*="Slide"][style*="opacity: 0"],
+[class*="Slide"][style*="opacity:0"] {
+opacity: 1 !important;
+}
+/* Handle Tailwind opacity-0 class with animation-related classes */
+[class*="animation"].opacity-0,
+[class*="reveal"].opacity-0,
+[class*="fade"].opacity-0,
+[class*="Fade"].opacity-0,
+[class*="slide"].opacity-0,
+[class*="Slide"].opacity-0 {
+opacity: 1 !important;
+}
+/* Hide Spline embeds during generation */
+spline-viewer,
+[data-spline],
+iframe[src*="spline.design"],
+iframe[src*="my.spline.design"],
+embed[src*="spline.design"],
+embed[src*="my.spline.design"],
+object[data*="spline.design"],
+object[data*="my.spline.design"] {
+display: none !important;
+visibility: hidden !important;
+}
+</style>
+<script>
+(function() {
+// Store original methods to restore later
+const originalRequestAnimationFrame = window.requestAnimationFrame;
+const originalSetTimeout = window.setTimeout;
+const originalSetInterval = window.setInterval;
+const originalGetContext = HTMLCanvasElement.prototype.getContext;
+// Disable requestAnimationFrame during loading
+window.requestAnimationFrame = function(callback) {
+// Return a fake ID and don't execute the callback
+return -1;
+};
+// Disable setTimeout for short intervals (likely animations)
+window.setTimeout = function(callback, delay) {
+// Only disable short timeouts that are likely animations
+if (delay < 100) {
+return -1;
+}
+return originalSetTimeout.apply(this, arguments);
+};
+// Disable setInterval (likely animations)
+window.setInterval = function(callback, delay) {
+// Disable all intervals during loading
+return -1;
+};
+// Disable canvas rendering
+HTMLCanvasElement.prototype.getContext = function(contextType, contextAttributes) {
+const context = originalGetContext.call(this, contextType, contextAttributes);
+if (!context) return context;
+// For 2D context, override drawing methods
+if (contextType === '2d') {
+const originalMethods = {};
+const drawingMethods = [
+'clearRect', 'fillRect', 'strokeRect', 'fillText', 'strokeText',
+'drawImage', 'putImageData', 'fill', 'stroke', 'arc', 'arcTo',
+'beginPath', 'closePath', 'lineTo', 'moveTo', 'quadraticCurveTo',
+'bezierCurveTo', 'rect', 'ellipse'
+];
+drawingMethods.forEach(method => {
+if (typeof context[method] === 'function') {
+originalMethods[method] = context[method];
+context[method] = function() {
+// Do nothing - disable drawing during loading
+return this;
+};
+}
+});
+// Store original methods for potential restoration
+context._originalMethods = originalMethods;
+}
+// For WebGL context, override key methods
+else if (contextType === 'webgl' || contextType === 'webgl2' || contextType === 'experimental-webgl') {
+const originalMethods = {};
+const webglMethods = [
+'clear', 'drawArrays', 'drawElements', 'useProgram', 'bindBuffer',
+'bindTexture', 'bindFramebuffer', 'viewport', 'enable', 'disable'
+];
+webglMethods.forEach(method => {
+if (typeof context[method] === 'function') {
+originalMethods[method] = context[method];
+context[method] = function() {
+// Do nothing - disable WebGL operations during loading
+return this;
+};
+}
+});
+// Store original methods for potential restoration
+context._originalMethods = originalMethods;
+}
+return context;
+};
+// Disable Three.js specific functionality
+const disableThreeJS = function() {
+// Wait for Three.js to potentially load
+setTimeout(() => {
+if (typeof THREE !== 'undefined') {
+// Override Three.js WebGLRenderer render method
+if (THREE.WebGLRenderer) {
+const originalRender = THREE.WebGLRenderer.prototype.render;
+THREE.WebGLRenderer.prototype.render = function() {
+// Do nothing - disable rendering during loading
+return this;
+};
+THREE.WebGLRenderer.prototype._originalRender = originalRender;
+}
+// Override Animation Mixer
+if (THREE.AnimationMixer) {
+const originalUpdate = THREE.AnimationMixer.prototype.update;
+THREE.AnimationMixer.prototype.update = function() {
+// Do nothing - disable animations during loading
+return this;
+};
+THREE.AnimationMixer.prototype._originalUpdate = originalUpdate;
+}
+}
+}, 100);
+};
+// Apply Three.js disabling
+disableThreeJS();
+// Disable Spline functionality during loading
+const disableSpline = function() {
+// Hide any existing spline viewers immediately
+const hideSplineElements = () => {
+const splineSelectors = [
+'spline-viewer',
+'[data-spline]',
+'iframe[src*="spline.design"]',
+'iframe[src*="my.spline.design"]',
+'embed[src*="spline.design"]',
+'embed[src*="my.spline.design"]',
+'object[data*="spline.design"]',
+'object[data*="my.spline.design"]'
+];
+splineSelectors.forEach(selector => {
+const elements = document.querySelectorAll(selector);
+elements.forEach(el => {
+el.style.display = 'none';
+el.style.visibility = 'hidden';
+});
+});
+};
+// Hide existing elements immediately
+hideSplineElements();
+// Monitor for new spline elements being added
+const observer = new MutationObserver(hideSplineElements);
+// Ensure document.body is available before observing
+if (document.body instanceof Node) {
+observer.observe(document.body, {
+childList: true,
+subtree: true,
+attributes: true,
+attributeFilter: ['src', 'data']
+});
+}
+// Disable Spline runtime if it exists
+if (typeof window.Spline !== 'undefined') {
+const originalSpline = window.Spline;
+window.Spline = function() {
+// Do nothing - disable Spline initialization during loading
+return {
+load: () => Promise.resolve(),
+setSize: () => {},
+dispose: () => {},
+play: () => {},
+pause: () => {},
+stop: () => {}
+};
+};
+window.Spline._originalSpline = originalSpline;
+}
+// Prevent new Spline instances from being created
+Object.defineProperty(window, 'Spline', {
+set: function(value) {
+// Store original but don't activate during loading
+window._SplineOriginal = value;
+},
+get: function() {
+// Return dummy implementation during loading
+return function() {
+return {
+load: () => Promise.resolve(),
+setSize: () => {},
+dispose: () => {},
+play: () => {},
+pause: () => {},
+stop: () => {}
+};
+};
+},
+configurable: true
+});
+};
+// Apply Spline disabling
+disableSpline();
+// Store restoration function globally (though we don't restore in this loading context)
+window._restoreCanvasAndAnimations = function() {
+window.requestAnimationFrame = originalRequestAnimationFrame;
+window.setTimeout = originalSetTimeout;
+window.setInterval = originalSetInterval;
+HTMLCanvasElement.prototype.getContext = originalGetContext;
+// Restore Three.js if available
+if (typeof THREE !== 'undefined') {
+if (THREE.WebGLRenderer && THREE.WebGLRenderer.prototype._originalRender) {
+THREE.WebGLRenderer.prototype.render = THREE.WebGLRenderer.prototype._originalRender;
+}
+if (THREE.AnimationMixer && THREE.AnimationMixer.prototype._originalUpdate) {
+THREE.AnimationMixer.prototype.update = THREE.AnimationMixer.prototype._originalUpdate;
+}
+}
+// Restore Spline if available
+if (window._SplineOriginal) {
+window.Spline = window._SplineOriginal;
+} else if (window.Spline && window.Spline._originalSpline) {
+window.Spline = window.Spline._originalSpline;
+}
+// Restore visibility of Spline elements
+const splineSelectors = [
+'spline-viewer',
+'[data-spline]',
+'iframe[src*="spline.design"]',
+'iframe[src*="my.spline.design"]',
+'embed[src*="spline.design"]',
+'embed[src*="my.spline.design"]',
+'object[data*="spline.design"]',
+'object[data*="my.spline.design"]'
+];
+splineSelectors.forEach(selector => {
+const elements = document.querySelectorAll(selector);
+elements.forEach(el => {
+el.style.display = '';
+el.style.visibility = '';
+});
+});
+};
+})();
+</script>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.inset-x-4{left:1rem;right:1rem}.inset-x-0{left:0px;right:0px}.-bottom-px{bottom:-1px}.top-0{top:0px}.-left-\[10\%\]{left:-10%}.-right-\[10\%\]{right:-10%}.-top-\[10\%\]{top:-10%}.left-1\/2{left:50%}.top-24{top:6rem}.top-\[20\%\]{top:20%}.bottom-0{bottom:0px}.left-0{left:0px}.right-0{right:0px}.left-5{left:1.25rem}.left-1{left:0.25rem}.top-1{top:0.25rem}.z-50{z-index:50}.z-10{z-index:10}.z-40{z-index:40}.-z-10{z-index:-10}.order-1{order:1}.order-2{order:2}.my-2{margin-top:0.5rem;margin-bottom:0.5rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-8{margin-bottom:2rem}.ml-auto{margin-left:auto}.mr-auto{margin-right:auto}.ml-1{margin-left:0.25rem}.mb-10{margin-bottom:2.5rem}.mb-12{margin-bottom:3rem}.mr-2{margin-right:0.5rem}.mb-16{margin-bottom:4rem}.mb-3{margin-bottom:0.75rem}.mb-20{margin-bottom:5rem}.mb-2{margin-bottom:0.5rem}.mb-6{margin-bottom:1.5rem}.mt-10{margin-top:2.5rem}.mt-2{margin-top:0.5rem}.mt-0\.5{margin-top:0.125rem}.-mr-3{margin-right:-0.75rem}.-mt-3{margin-top:-0.75rem}.mt-20{margin-top:5rem}.mt-3{margin-top:0.75rem}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-9{height:2.25rem}.h-px{height:1px}.h-2{height:0.5rem}.h-\[50\%\]{height:50%}.h-\[60\%\]{height:60%}.h-full{height:100%}.h-12{height:3rem}.h-\[52px\]{height:52px}.h-auto{height:auto}.h-10{height:2.5rem}.h-\[440px\]{height:440px}.h-6{height:1.5rem}.h-8{height:2rem}.h-\[400px\]{height:400px}.h-4{height:1rem}.max-h-full{max-height:100%}.min-h-\[500px\]{min-height:500px}.min-h-\[300px\]{min-height:300px}.w-9{width:2.25rem}.w-full{width:100%}.w-2{width:0.5rem}.w-\[50\%\]{width:50%}.w-\[60\%\]{width:60%}.w-\[90\%\]{width:90%}.w-\[52px\]{width:52px}.w-10{width:2.5rem}.w-px{width:1px}.w-14{width:3.5rem}.w-6{width:1.5rem}.w-\[600px\]{width:600px}.w-4{width:1rem}.min-w-\[170px\]{min-width:170px}.max-w-5xl{max-width:64rem}.max-w-2xl{max-width:42rem}.max-w-7xl{max-width:80rem}.max-w-\[340px\]{max-width:340px}.max-w-lg{max-width:32rem}.max-w-\[280px\]{max-width:280px}.max-w-\[320px\]{max-width:320px}.max-w-\[960px\]{max-width:960px}.max-w-3xl{max-width:48rem}.max-w-\[220px\]{max-width:220px}.max-w-md{max-width:28rem}.max-w-xl{max-width:36rem}.max-w-\[1140px\]{max-width:1140px}.max-w-full{max-width:100%}.max-w-6xl{max-width:72rem}.shrink-0{flex-shrink:0}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.\!translate-y-full{--tw-translate-y:100% !important;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important}.translate-x-0{--tw-translate-x:0px;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scale-100{--tw-scale-x:1;--tw-scale-y:1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scale-x-0{--tw-scale-x:0;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.list-none{list-style-type:none}.flex-row{flex-direction:row}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-16{gap:4rem}.gap-8{gap:2rem}.gap-1\.5{gap:0.375rem}.gap-x-16{column-gap:4rem}.gap-y-0{row-gap:0px}.gap-y-16{row-gap:4rem}.gap-x-4{column-gap:1rem}.gap-y-4{row-gap:1rem}.gap-x-6{column-gap:1.5rem}.gap-x-8{column-gap:2rem}.gap-y-6{row-gap:1.5rem}.gap-x-12{column-gap:3rem}.gap-x-3{column-gap:0.75rem}.gap-y-12{row-gap:3rem}.gap-y-3{row-gap:0.75rem}.gap-x-1{column-gap:0.25rem}.gap-x-2{column-gap:0.5rem}.gap-y-1{row-gap:0.25rem}.gap-y-2{row-gap:0.5rem}.gap-y-8{row-gap:2rem}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-x-5 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1.25rem * var(--tw-space-x-reverse));margin-left:calc(1.25rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.self-center{align-self:center}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-\[24px\]{border-radius:24px}.rounded-\[20px\]{border-radius:20px}.rounded-\[2rem\]{border-radius:2rem}.rounded-\[3\.5rem\]{border-radius:3.5rem}.rounded-xl{border-radius:0.75rem}.rounded-\[1\.7rem\]{border-radius:1.7rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-200\/60{border-color:rgb(226 232 240 / 0.6)}.border-blue-100{--tw-border-opacity:1;border-color:rgb(219 234 254 / var(--tw-border-opacity, 1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249 / var(--tw-border-opacity, 1))}.border-transparent{border-color:transparent}.border-white\/5{border-color:rgb(255 255 255 / 0.05)}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-\[\#2C56EA\]{--tw-bg-opacity:1;background-color:rgb(44 86 234 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/80{background-color:rgb(255 255 255 / 0.8)}.bg-blue-50\/50{background-color:rgb(239 246 255 / 0.5)}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-\[\#D0DEF5\]{--tw-bg-opacity:1;background-color:rgb(208 222 245 / var(--tw-bg-opacity, 1))}.bg-blue-500\/10{background-color:rgb(59 130 246 / 0.1)}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-\[\#000000\]{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-500\/5{background-color:rgb(59 130 246 / 0.05)}.bg-neutral-50{--tw-bg-opacity:1;background-color:rgb(250 250 250 / var(--tw-bg-opacity, 1))}.bg-neutral-900\/20{background-color:rgb(23 23 23 / 0.2)}.bg-slate-200{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.bg-transparent{background-color:transparent}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.bg-\[\#1B1B1B\]{--tw-bg-opacity:1;background-color:rgb(27 27 27 / var(--tw-bg-opacity, 1))}.bg-white\/5{background-color:rgb(255 255 255 / 0.05)}.bg-\[url\(https\:\/\/hoirqrkdgbmvpwutwuwj\.supabase\.co\/storage\/v1\/object\/public\/assets\/assets\/f79a2b8c-c34b-42e0-8787-66bb52186118_1600w\.png\)\]{background-image:url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f79a2b8c-c34b-42e0-8787-66bb52186118_1600w.png)}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.bg-gradient-to-bl{background-image:linear-gradient(to bottom left, var(--tw-gradient-stops))}.bg-gradient-to-tr{background-image:linear-gradient(to top right, var(--tw-gradient-stops))}.bg-gradient-to-b{background-image:linear-gradient(to bottom, var(--tw-gradient-stops))}.bg-\[url\(https\:\/\/hoirqrkdgbmvpwutwuwj\.supabase\.co\/storage\/v1\/object\/public\/assets\/assets\/2de94e58-c7ec-47e0-8070-58202f4186ad_800w\.png\)\]{background-image:url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2de94e58-c7ec-47e0-8070-58202f4186ad_800w.png)}.bg-\[url\(https\:\/\/hoirqrkdgbmvpwutwuwj\.supabase\.co\/storage\/v1\/object\/public\/assets\/assets\/8aa7ac19-c4ce-4a56-9010-ba4a05fc32ce_800w\.png\)\]{background-image:url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8aa7ac19-c4ce-4a56-9010-ba4a05fc32ce_800w.png)}.bg-\[url\(https\:\/\/hoirqrkdgbmvpwutwuwj\.supabase\.co\/storage\/v1\/object\/public\/assets\/assets\/ad581aa7-45f6-40d1-8f7f-ffb171207920_800w\.png\)\]{background-image:url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ad581aa7-45f6-40d1-8f7f-ffb171207920_800w.png)}.from-blue-500\/0{--tw-gradient-from:rgb(59 130 246 / 0) var(--tw-gradient-from-position);--tw-gradient-to:rgb(59 130 246 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-blue-100{--tw-gradient-from:#dbeafe var(--tw-gradient-from-position);--tw-gradient-to:rgb(219 234 254 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-100{--tw-gradient-from:#f3e8ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(243 232 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-transparent{--tw-gradient-from:transparent var(--tw-gradient-from-position);--tw-gradient-to:rgb(0 0 0 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-blue-500\/70{--tw-gradient-to:rgb(59 130 246 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(59 130 246 / 0.7) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-indigo-100{--tw-gradient-to:rgb(224 231 255 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #e0e7ff var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-pink-100{--tw-gradient-to:rgb(252 231 243 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #fce7f3 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-\[\#D0DEF5\]{--tw-gradient-to:rgb(208 222 245 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #D0DEF5 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-slate-200{--tw-gradient-to:rgb(226 232 240 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #e2e8f0 var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-blue-500\/0{--tw-gradient-to:rgb(59 130 246 / 0) var(--tw-gradient-to-position)}.to-transparent{--tw-gradient-to:transparent var(--tw-gradient-to-position)}.bg-cover{background-size:cover}.bg-center{background-position:center}.object-contain{object-fit:contain}.object-cover{object-fit:cover}.object-fill{object-fit:fill}.p-6{padding:1.5rem}.p-8{padding:2rem}.p-3\.5{padding:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.px-8{padding-left:2rem;padding-right:2rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pb-4{padding-bottom:1rem}.pl-4{padding-left:1rem}.pr-4{padding-right:1rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.pt-4{padding-top:1rem}.pb-24{padding-bottom:6rem}.pl-6{padding-left:1.5rem}.pr-6{padding-right:1.5rem}.pt-24{padding-top:6rem}.pb-6{padding-bottom:1.5rem}.pl-8{padding-left:2rem}.pr-8{padding-right:2rem}.pl-0{padding-left:0px}.pt-1{padding-top:0.25rem}.pb-10{padding-bottom:2.5rem}.pb-16{padding-bottom:4rem}.pb-8{padding-bottom:2rem}.pl-10{padding-left:2.5rem}.pr-10{padding-right:2.5rem}.pt-10{padding-top:2.5rem}.pt-16{padding-top:4rem}.pt-8{padding-top:2rem}.pb-3\.5{padding-bottom:0.875rem}.pt-3\.5{padding-top:0.875rem}.pb-0{padding-bottom:0px}.pb-12{padding-bottom:3rem}.pr-0{padding-right:0px}.pt-0{padding-top:0px}.pt-12{padding-top:3rem}.pt-6{padding-top:1.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-base{font-size:1rem;line-height:1.5rem}.text-5xl{font-size:3rem;line-height:1}.text-\[38px\]{font-size:38px}.text-2xl{font-size:1.5rem;line-height:2rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[10px\]{font-size:10px}.text-xs{font-size:0.75rem;line-height:1rem}.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-bold{font-weight:700}.font-light{font-weight:300}.font-normal{font-weight:400}.uppercase{text-transform:uppercase}.leading-\[1\.1\]{line-height:1.1}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-\[\#2c56ea\]{--tw-text-opacity:1;color:rgb(44 86 234 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-\[\#1B1B1B\]{--tw-text-opacity:1;color:rgb(27 27 27 / var(--tw-text-opacity, 1))}.text-\[\#2C56EA\]{--tw-text-opacity:1;color:rgb(44 86 234 / var(--tw-text-opacity, 1))}.text-\[\#2C2C2C\]{--tw-text-opacity:1;color:rgb(44 44 44 / var(--tw-text-opacity, 1))}.text-\[\#565656\]{--tw-text-opacity:1;color:rgb(86 86 86 / var(--tw-text-opacity, 1))}.text-\[\#979797\]{--tw-text-opacity:1;color:rgb(151 151 151 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-50{--tw-text-opacity:1;color:rgb(249 250 251 / var(--tw-text-opacity, 1))}.text-neutral-300{--tw-text-opacity:1;color:rgb(212 212 212 / var(--tw-text-opacity, 1))}.text-neutral-400{--tw-text-opacity:1;color:rgb(163 163 163 / var(--tw-text-opacity, 1))}.text-neutral-500{--tw-text-opacity:1;color:rgb(115 115 115 / var(--tw-text-opacity, 1))}.text-white\/90{color:rgb(255 255 255 / 0.9)}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-950{--tw-text-opacity:1;color:rgb(2 6 23 / var(--tw-text-opacity, 1))}.text-neutral-700{--tw-text-opacity:1;color:rgb(64 64 64 / var(--tw-text-opacity, 1))}.opacity-30{opacity:0.3}.opacity-0{opacity:0}.opacity-100{opacity:1}.\!opacity-0{opacity:0 !important}.opacity-50{opacity:0.5}.mix-blend-multiply{mix-blend-mode:multiply}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-blue-600\/20{--tw-shadow-color:rgb(37 99 235 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-slate-900\/10{--tw-shadow-color:rgb(15 23 42 / 0.1);--tw-shadow:var(--tw-shadow-colored)}.shadow-indigo-500\/30{--tw-shadow-color:rgb(99 102 241 / 0.3);--tw-shadow:var(--tw-shadow-colored)}.shadow-blue-900\/20{--tw-shadow-color:rgb(30 58 138 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-black\/20{--tw-shadow-color:rgb(0 0 0 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-blue-900\/10{--tw-shadow-color:rgb(30 58 138 / 0.1);--tw-shadow:var(--tw-shadow-colored)}.shadow-white\/5{--tw-shadow-color:rgb(255 255 255 / 0.05);--tw-shadow:var(--tw-shadow-colored)}.ring-1{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.ring-slate-900\/5{--tw-ring-color:rgb(15 23 42 / 0.05)}.ring-white\/5{--tw-ring-color:rgb(255 255 255 / 0.05)}.ring-black\/5{--tw-ring-color:rgb(0 0 0 / 0.05)}.blur-\[100px\]{--tw-blur:blur(100px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-\[120px\]{--tw-blur:blur(120px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-\[80px\]{--tw-blur:blur(80px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.grayscale{--tw-grayscale:grayscale(100%);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-xl{--tw-backdrop-blur:blur(24px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.\!transition-all{transition-property:all !important;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1) !important;transition-duration:150ms !important}.duration-300{transition-duration:300ms}.duration-700{transition-duration:700ms}.duration-150{transition-duration:150ms}.\!duration-\[700ms\]{transition-duration:700ms !important}.duration-200{transition-duration:200ms}.ease-out{transition-timing-function:cubic-bezier(0, 0, 0.2, 1)}.ease-in-out{transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1)}.\!ease-\[cubic-bezier\(0\.25\2c 1\2c 0\.5\2c 1\)\]{transition-timing-function:cubic-bezier(0.25,1,0.5,1) !important}.perspective-normal{perspective:500px}.perspective-distant{perspective:1200px}.transform-style-preserve-3d{transform-style:preserve-3d}.selection\:bg-white\/20 *::selection{background-color:rgb(255 255 255 / 0.2)}.selection\:bg-white\/20::selection{background-color:rgb(255 255 255 / 0.2)}.open\:ring-black\/10[open]{--tw-ring-color:rgb(0 0 0 / 0.1)}.hover\:scale-105:hover{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:scale-\[1\.02\]:hover{--tw-scale-x:1.02;--tw-scale-y:1.02;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:border-slate-300\/60:hover{border-color:rgb(203 213 225 / 0.6)}.hover\:border-blue-200:hover{--tw-border-opacity:1;border-color:rgb(191 219 254 / var(--tw-border-opacity, 1))}.hover\:border-slate-300:hover{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.hover\:bg-slate-50:hover{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-800:hover{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-50:hover{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-600:hover{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.hover\:bg-white\/10:hover{background-color:rgb(255 255 255 / 0.1)}.hover\:bg-white\/5:hover{background-color:rgb(255 255 255 / 0.05)}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.hover\:text-slate-900:hover{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.hover\:text-neutral-900:hover{--tw-text-opacity:1;color:rgb(23 23 23 / var(--tw-text-opacity, 1))}.hover\:shadow-md:hover{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-xl:hover{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-lg:hover{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:shadow-slate-200\/20:hover{--tw-shadow-color:rgb(226 232 240 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.hover\:shadow-slate-200\/50:hover{--tw-shadow-color:rgb(226 232 240 / 0.5);--tw-shadow:var(--tw-shadow-colored)}.hover\:rotate-x-0:hover{--tw-rotate-x:0deg;transform:translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))}.hover\:rotate-y-0:hover{--tw-rotate-y:0deg;transform:translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-slate-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(226 232 240 / var(--tw-ring-opacity, 1))}.focus\:ring-slate-900:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(15 23 42 / var(--tw-ring-opacity, 1))}.focus\:ring-offset-2:focus{--tw-ring-offset-width:2px}.focus-visible\:outline-none:focus-visible{outline:2px solid transparent;outline-offset:2px}.focus-visible\:ring-2:focus-visible{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus-visible\:ring-slate-900:focus-visible{--tw-ring-opacity:1;--tw-ring-color:rgb(15 23 42 / var(--tw-ring-opacity, 1))}.focus-visible\:ring-offset-2:focus-visible{--tw-ring-offset-width:2px}.active\:scale-\[0\.98\]:active{--tw-scale-x:0.98;--tw-scale-y:0.98;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group[open] .group-open\:rotate-180{--tw-rotate:180deg;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:scale-\[1\.02\]{--tw-scale-x:1.02;--tw-scale-y:1.02;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:scale-x-100{--tw-scale-x:1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:bg-blue-500\/20{background-color:rgb(59 130 246 / 0.2)}.group:hover .group-hover\:text-\[\#2C2C2C\]{--tw-text-opacity:1;color:rgb(44 44 44 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-\[\#2C56EA\]{--tw-text-opacity:1;color:rgb(44 86 234 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-neutral-200{--tw-text-opacity:1;color:rgb(229 229 229 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-neutral-300{--tw-text-opacity:1;color:rgb(212 212 212 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}}@media (min-width: 768px){.md\:col-span-1{grid-column:span 1 / span 1}.md\:col-span-2{grid-column:span 2 / span 2}.md\:flex{display:flex}.md\:hidden{display:none}.md\:max-w-full{max-width:100%}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:gap-16{gap:4rem}.md\:pb-0{padding-bottom:0px}.md\:pb-20{padding-bottom:5rem}.md\:pr-0{padding-right:0px}.md\:pt-0{padding-top:0px}.md\:text-left{text-align:left}.md\:text-6xl{font-size:3.75rem;line-height:1}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}.md\:text-\[40px\]{font-size:40px}.md\:text-5xl{font-size:3rem;line-height:1}}@media (min-width: 1024px){.lg\:order-1{order:1}.lg\:order-2{order:2}.lg\:mx-0{margin-left:0px;margin-right:0px}.lg\:-mt-4{margin-top:-1rem}.lg\:mb-4{margin-bottom:1rem}.lg\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-\[370px_1fr\]{grid-template-columns:370px 1fr}.lg\:items-stretch{align-items:stretch}.lg\:justify-start{justify-content:flex-start}.lg\:justify-end{justify-content:flex-end}.lg\:pl-0{padding-left:0px}.lg\:pb-12{padding-bottom:3rem}.lg\:pb-0{padding-bottom:0px}.lg\:pl-20{padding-left:5rem}.lg\:pr-0{padding-right:0px}.lg\:pt-0{padding-top:0px}.lg\:text-left{text-align:left}.lg\:text-7xl{font-size:4.5rem;line-height:1}.lg\:text-\[48px\]{font-size:48px}.lg\:text-6xl{font-size:3.75rem;line-height:1}}.\[\&\.active\]\:\!translate-y-0.active{--tw-translate-y:0px !important;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important}.\[\&\.active\]\:\!opacity-100.active{opacity:1 !important}</style><link id="all-fonts-link-font-geist" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist">.font-geist { font-family: 'Geist', sans-serif !important; }</style><link id="all-fonts-link-font-roboto" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-roboto">.font-roboto { font-family: 'Roboto', sans-serif !important; }</style><link id="all-fonts-link-font-montserrat" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-montserrat">.font-montserrat { font-family: 'Montserrat', sans-serif !important; }</style><link id="all-fonts-link-font-poppins" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-poppins">.font-poppins { font-family: 'Poppins', sans-serif !important; }</style><link id="all-fonts-link-font-playfair" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"><style id="all-fonts-style-font-playfair">.font-playfair { font-family: 'Playfair Display', serif !important; }</style><link id="all-fonts-link-font-instrument-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-instrument-serif">.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }</style><link id="all-fonts-link-font-merriweather" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"><style id="all-fonts-style-font-merriweather">.font-merriweather { font-family: 'Merriweather', serif !important; }</style><link id="all-fonts-link-font-bricolage" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-bricolage">.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }</style><link id="all-fonts-link-font-jakarta" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-jakarta">.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }</style><link id="all-fonts-link-font-manrope" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-manrope">.font-manrope { font-family: 'Manrope', sans-serif !important; }</style><link id="all-fonts-link-font-space-grotesk" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-space-grotesk">.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }</style><link id="all-fonts-link-font-work-sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-work-sans">.font-work-sans { font-family: 'Work Sans', sans-serif !important; }</style><link id="all-fonts-link-font-pt-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-pt-serif">.font-pt-serif { font-family: 'PT Serif', serif !important; }</style><link id="all-fonts-link-font-geist-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist-mono">.font-geist-mono { font-family: 'Geist Mono', monospace !important; }</style><link id="all-fonts-link-font-space-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-space-mono">.font-space-mono { font-family: 'Space Mono', monospace !important; }</style><link id="all-fonts-link-font-quicksand" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-quicksand">.font-quicksand { font-family: 'Quicksand', sans-serif !important; }</style><link id="all-fonts-link-font-nunito" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-nunito">.font-nunito { font-family: 'Nunito', sans-serif !important; }</style><link id="all-fonts-link-font-newsreader" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..800&amp;display=swap"><style id="all-fonts-style-font-newsreader">.font-newsreader { font-family: 'Newsreader', serif !important; }</style><link id="all-fonts-link-font-google-sans-flex" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-google-sans-flex">.font-google-sans-flex { font-family: 'Google Sans Flex', sans-serif !important; }</style><link id="all-fonts-link-font-oswald" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-oswald">.font-oswald { font-family: 'Oswald', sans-serif !important; }</style><link id="all-fonts-link-font-dm-sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-dm-sans">.font-dm-sans { font-family: 'DM Sans', sans-serif !important; }</style><link id="all-fonts-link-font-cormorant" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-cormorant">.font-cormorant { font-family: 'Cormorant Garamond', serif !important; }</style></head>
+<body class="selection:bg-white/20 text-white bg-gray-50">
+
+    <!-- Main Features Section (Figma Recreation) -->
+    <nav class="sticky flex z-50 w-full pt-4 pr-4 pb-4 pl-4 top-0 justify-center">
+  <div class="sticky transition-all hover:shadow-md hover:border-slate-300/60 hover:shadow-slate-200/20 bg-white/80 w-full max-w-5xl border-slate-200/60 border rounded-full pt-3 pr-4 pb-3 pl-4 shadow-sm backdrop-blur-xl">
+    <div class="flex items-center justify-between">
+      <!-- Brand Logo -->
+      <a href="/index.html" class="flex items-center gap-2.5 group">
+  <div class="flex transition-transform duration-300 group-hover:scale-105 bg-center shadow-blue-600/20 text-white w-9 h-9 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f79a2b8c-c34b-42e0-8787-66bb52186118_1600w.png)] bg-cover rounded-lg items-center justify-center">
+  </div>
+  <span class="text-lg font-semibold text-[#2c56ea] tracking-tight font-manrope" >Jarabiz</span>
+</a>
+
+      <!-- Desktop Navigation Links -->
+      <div class="hidden md:flex items-center gap-1">
+        <a href="#features" class="group transition-colors hover:text-slate-900 text-sm font-medium text-slate-500 pt-2 pr-4 pb-2 pl-4 relative font-manrope" style="">
+          Features
+          <span class="absolute inset-x-4 -bottom-px h-px scale-x-0 bg-gradient-to-r from-blue-500/0 via-blue-500/70 to-blue-500/0 transition-transform duration-300 group-hover:scale-x-100"></span>
+        </a>
+        <a href="#solutions" class="group relative px-4 py-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-900 font-manrope" style="">
+          Solutions
+          <span class="absolute inset-x-4 -bottom-px h-px scale-x-0 bg-gradient-to-r from-blue-500/0 via-blue-500/70 to-blue-500/0 transition-transform duration-300 group-hover:scale-x-100"></span>
+        </a>
+        <a href="#pricing" class="group transition-colors text-sm font-medium text-slate-500 pt-2 pr-4 pb-2 pl-4 relative hover:text-slate-900 font-manrope" style="">
+          Pricing
+          <span class="absolute inset-x-4 -bottom-px h-px scale-x-0 bg-gradient-to-r from-blue-500/0 via-blue-500/70 to-blue-500/0 transition-transform duration-300 group-hover:scale-x-100"></span>
+        </a>
+        <a href="#faq" class="group relative px-4 py-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-900 font-manrope" style="">
+          FAQ
+          <span class="absolute inset-x-4 -bottom-px h-px scale-x-0 bg-gradient-to-r from-blue-500/0 via-blue-500/70 to-blue-500/0 transition-transform duration-300 group-hover:scale-x-100"></span>
+        </a>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-3 items-center">
+
+        <a href="#" class="inline-flex items-center justify-center transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 shadow-slate-900/10 hover:bg-slate-800 text-sm font-medium text-white bg-[#2C56EA] h-9 rounded-full px-5 shadow-lg font-manrope" style="">Get Started</a>
+        <!-- Mobile Menu Toggle -->
+        <div class="relative md:hidden">
+          <button aria-label="Menu" onclick="const m=document.getElementById('mobile-menu-aura');const o=document.getElementById('mobile-overlay-aura');const i=this.querySelector('iconify-icon');if(m.classList.contains('hidden')){m.classList.remove('hidden');o.classList.remove('hidden');i.setAttribute('icon','lucide:x')}else{m.classList.add('hidden');o.classList.add('hidden');i.setAttribute('icon','lucide:menu')}" class="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-900">
+    <iconify-icon icon="lucide:menu" width="18" height="18" style="color: rgb(15, 23, 42);" class=""></iconify-icon>
+  </button>
+          <div id="mobile-overlay-aura" onclick="this.previousElementSibling.click()" class="hidden fixed inset-0 z-40">
+          </div>
+          <div id="mobile-menu-aura" class="hidden fixed left-1/2 top-24 z-50 flex w-[90%] max-w-[340px] -translate-x-1/2 flex-col rounded-[24px] bg-white p-6 shadow-2xl ring-1 ring-slate-900/5 transition-all">
+            <nav class="flex flex-col space-y-4 text-center">
+              <a href="#features" class="text-base font-medium text-slate-600 transition-colors hover:text-slate-900 font-manrope" style="">Features</a>
+              <a href="#solutions" class="text-base font-medium text-slate-600 transition-colors hover:text-slate-900 font-manrope" style="">Solutions</a>
+              <a href="#pricing" class="text-base font-medium text-slate-600 transition-colors hover:text-slate-900 font-manrope" style="">Pricing</a>
+              <a href="#faq" class="text-base font-medium text-slate-600 transition-colors hover:text-slate-900 font-manrope" style="">FAQ</a>
+              <div class="h-px w-full bg-slate-100 my-2"></div>
+              <a href="#" class="flex w-full items-center justify-center rounded-full bg-[#2C56EA] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition-transform hover:scale-[1.02] hover:bg-blue-600 font-manrope" style="">Get
+                Started</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav><section class="overflow-hidden bg-white pt-24 pb-24 relative">
+  <!-- Background Gradients -->
+  <div class="absolute top-0 inset-x-0 h-full w-full overflow-hidden pointer-events-none opacity-30">
+    <div class="absolute -top-[10%] -left-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr blur-[120px] from-blue-100 via-indigo-100 to-transparent">
+    </div>
+    <div class="absolute top-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-gradient-to-bl blur-[100px] from-purple-100 via-pink-100 to-transparent">
+    </div>
+  </div>
+
+  <div class="container max-w-7xl z-10 mr-auto ml-auto relative gap-x-16 gap-y-16">
+    <div class="grid lg:grid-cols-2 gap-x-16 gap-y-0 items-center">
+  <!-- Left Column: Content -->
+  <div class="md:text-left text-center max-w-2xl">
+  <!-- Badge -->
+  <div class="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50/50 px-3 py-1 text-sm font-medium text-blue-600 mb-8 backdrop-blur-sm transition-colors hover:bg-blue-50 hover:border-blue-200 cursor-pointer">
+    <span class="flex h-2 w-2 rounded-full bg-blue-600 animate-pulse"></span>
+    <span class="tracking-tight font-manrope">Sales, inventory, and reports — in one app</span>
+    <iconify-icon icon="lucide:arrow-right" width="14" class="ml-1"></iconify-icon>
+  </div>
+
+  <!-- Headline -->
+  <h1 class="leading-[1.1] md:text-6xl lg:text-7xl text-5xl font-semibold text-slate-900 tracking-tight pb-6 font-manrope" style="">Stop guessing. Start running your business with facts.</h1>
+
+  <!-- Subheadline -->
+  <p class="md:text-xl leading-relaxed text-lg font-medium text-slate-500 max-w-lg mb-10 font-manrope" style="">
+    The all-in-one platform to track stock, manage orders, and predict trends. Built for modern retailers who move
+    fast.
+  </p>
+
+  <!-- CTA Buttons -->
+  <div class="flex flex-col sm:flex-row gap-4 mb-12 gap-x-4 gap-y-4">
+    <button class="inline-flex shadow-slate-900/10 transition-all hover:bg-slate-800 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 text-sm font-medium text-white bg-[#2C56EA] h-12 rounded-full pr-8 pl-8 shadow-lg items-center justify-center font-manrope">
+       <a href="https://play.google.com/store/apps/details?id=com.lynx.jarabiz">Get Started
+       </strong></a>
+    </button>
+    <button class="inline-flex h-12 items-center justify-center rounded-full border border-slate-200 bg-white px-8 text-sm font-medium text-slate-700 shadow-sm transition-all hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2 font-manrope">
+                      <iconify-icon icon="lucide:play-circle" width="18" class="mr-2 text-slate-400"></iconify-icon>
+                      Watch demo
+                  </button>
+  </div>
+
+  <!-- Trust Indicators -->
+
+</div>
+
+  <!-- Right Column: Visual -->
+  <div class="group flex md:max-w-full w-full max-w-[280px] mr-auto ml-auto relative perspective-distant items-center justify-center">
+  <!-- Ambient Glow -->
+  <div class="blur-[80px] pointer-events-none -z-10 group-hover:bg-blue-500/20 transition-colors duration-700 bg-blue-500/10 rounded-full absolute top-0 right-0 bottom-0 left-0 gap-x-16 gap-y-16">
+  </div>
+
+  <!-- 3D Phone Mockup -->
+  <div class="transition-all duration-700 ease-out transform-style-preserve-3d hover:rotate-x-0 hover:rotate-y-0 hover:scale-105 shadow-indigo-500/30 w-full max-w-[320px] relative rounded-[3.5rem] shadow-2xl rotate-x-[5deg] rotate-y-[-12deg]">
+    <!-- Camera/Sensor Island (Dynamic Island) -->
+
+
+    <!-- Screen Image -->
+    <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e91531c4-892f-416d-933d-e620771ec66d_800w.png" alt="Create Account Interface" class="w-full h-auto object-cover rounded-[2rem]">
+
+    <!-- Glass Reflection Overlay -->
+
+  </div>
+</div>
+</div>
+  </div>
+</section><section class="overflow-hidden bg-gray-50 pt-24 pb-24 relative">
+  <div class="container max-w-[960px] mr-auto ml-auto">
+    <!-- Heading -->
+    <div class="text-center">
+      <h2 class="text-[38px] md:text-[40px] lg:text-[48px] leading-[1.1] font-semibold text-[#1B1B1B] tracking-tight font-manrope" style="">Jarabiz helps you make sense of your business. It records your sales, tracks inventory, and monitors operations automatically.</h2>
+    </div>
+
+    <!-- Grid -->
+    
+  </div>
+</section><section class="overflow-hidden bg-gray-100 pt-24 pb-24 relative" id="solutions">
+  <div class="container max-w-[960px] mr-auto ml-auto pr-6 pl-6">
+    <!-- Heading -->
+    <div class="text-center mb-16">
+      <h2 class="text-[38px] md:text-[40px] lg:text-[48px] leading-[1.1] font-semibold text-[#1B1B1B] tracking-tight font-manrope">
+        Jarabiz helps you…
+      </h2>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid md:grid-cols-2 gap-x-8 gap-y-6">
+      <!-- Card 1: Sales -->
+      <div class="feature-card flex flex-col gap-6 h-full border rounded-[20px] px-5 py-5 gap-x-6 gap-y-6 items-start bg-white border-slate-100" style="">
+        <div class="w-[52px] h-[52px] rounded-xl bg-[#D0DEF5] flex items-center justify-center text-[#2C56EA]">
+          <iconify-icon icon="solar:bag-check-linear" width="24" stroke-width="1.5" class=""></iconify-icon>
+        </div>
+        <div class="">
+          <h3 class="text-2xl font-semibold text-[#2C2C2C] mb-3 font-manrope" style="">Sales</h3>
+          <p class="leading-relaxed text-base font-medium text-[#565656] font-manrope" style="">Record every sale instantly.
+See daily sales, best-selling items, and who sold what.</p>
+        </div>
+      </div>
+
+      <!-- Card 2: Inventory -->
+      <div class="feature-card flex flex-col gap-6 h-full border rounded-[20px] px-5 py-5 gap-x-6 gap-y-6 items-start bg-white border-slate-100" style="">
+        <div class="w-[52px] h-[52px] rounded-xl bg-[#D0DEF5] flex items-center justify-center text-[#2C56EA]">
+          <iconify-icon icon="solar:box-linear" width="24" stroke-width="1.5" class=""></iconify-icon>
+        </div>
+        <div class="">
+          <h3 class="text-2xl font-semibold text-[#2C2C2C] mb-3 font-manrope" style="">Inventory &amp; Stock Control Solution</h3>
+          <p class="leading-relaxed text-base font-medium text-[#565656] font-manrope" style="">Always know what’s in stock, what’s running low, and what’s finished — before customers ask.</p>
+        </div>
+      </div>
+
+      <!-- Card 3: Business Insight -->
+      <div class="feature-card flex flex-col gap-6 h-full border rounded-[20px] px-5 py-5 gap-x-6 gap-y-6 items-start bg-white border-slate-100" style="">
+        <div class="w-[52px] h-[52px] rounded-xl bg-[#D0DEF5] flex items-center justify-center text-[#2C56EA]">
+          <iconify-icon icon="solar:chart-2-linear" width="24" stroke-width="1.5" class=""></iconify-icon>
+        </div>
+        <div class="">
+          <h3 class="text-2xl font-semibold text-[#2C2C2C] mb-3 font-manrope" style="">Business Insight Solution</h3>
+          <p class="leading-relaxed text-base font-medium text-[#565656] font-manrope" style="">See your profit, losses, and trends clearly — so you make decisions with facts, not vibes.</p>
+        </div>
+      </div>
+
+      <!-- Card 4: Staff & Operations -->
+      <div class="feature-card flex flex-col h-full border rounded-[20px] px-5 py-5 gap-x-6 gap-y-6 items-start bg-white border-slate-100" style="">
+        <div class="w-[52px] h-[52px] rounded-xl bg-[#D0DEF5] flex items-center justify-center text-[#2C56EA]">
+          <iconify-icon icon="solar:users-group-two-rounded-linear" width="24" stroke-width="1.5" class=""></iconify-icon>
+        </div>
+        <div class="">
+          <h3 class="text-2xl font-semibold text-[#2C2C2C] mb-3 font-manrope" style="">Staff &amp; Operations Solution</h3>
+          <p class="leading-relaxed text-base font-medium text-[#565656] font-manrope" style="">Give staff only the access they need.
+Track activity. Reduce mistakes and “stories”.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section><section class="overflow-hidden bg-gray-100 border-slate-100 border-b pt-24 pb-24 relative gap-x-16 gap-y-16" style="">
+    <div class="container max-w-7xl mr-auto ml-auto pr-6 pl-6 gap-x-16 gap-y-16">
+        <!-- Section Header -->
+        <div class="text-center max-w-3xl mr-auto mb-20 ml-auto">
+            <h2 class="text-[38px] md:text-[40px] lg:text-[48px] leading-[1.1] font-semibold text-[#1B1B1B] tracking-tight font-manrope" style="">
+                How it works
+            </h2>
+            <p class="leading-relaxed text-lg font-medium text-slate-500 font-manrope" style="">Create your account, add your stock, and start seeing exactly how your business is performing.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-16 gap-x-16 gap-y-16 items-center">
+            
+            <!-- Left Column: Sticky Phone Mockup -->
+            <div class="order-2 lg:order-1 flex lg:justify-end w-hug relative gap-x-16 gap-y-0 justify-center">
+  <div class="sticky overflow-hidden z-10 bg-center w-full h-[440px] max-w-[220px] rounded-[1.7rem] relative top-24 perspective-normal gap-x-16 gap-y-0 shadow-blue-900/20">
+    <!-- Screen 1: Create Account -->
+    <div class="transition-opacity duration-150 ease-in-out opacity-100 w-full h-full absolute top-0 right-0 bottom-0 left-0 gap-x-16 gap-y-16" id="phone-screen-1">
+      <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3bc12734-cf35-40c5-9516-be403673baf7_800w.png" alt="Create Account" class="w-full h-full object-fill">
+    </div>
+
+    <!-- Screen 2: Inventory -->
+    <div class="transition-opacity duration-150 ease-in-out bg-slate-50 opacity-0 w-full h-full absolute top-0 right-0 bottom-0 left-0" id="phone-screen-2">
+      <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e9bc3ac8-3721-4384-a83b-b014bba83cfa_800w.png" alt="Manage Inventory" class="w-full h-full object-fill">
+    </div>
+
+    <!-- Screen 3: Analytics -->
+    <div class="transition-opacity duration-150 ease-in-out opacity-0 w-full h-full absolute top-0 right-0 bottom-0 left-0 bg-slate-50" id="phone-screen-3" style="">
+      <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e91531c4-892f-416d-933d-e620771ec66d_800w.png" alt="Track Performance" class="w-full h-full max-w-xl object-fill">
+    </div>
+  </div>
+</div>
+
+            <!-- Right Column: Interactive Steps -->
+            <div class="order-1 flex flex-col lg:order-2 lg:pl-0 max-w-xl pl-0 relative gap-x-16 gap-y-0 justify-center">
+    <!-- Vertical Line connecting steps with fade effect -->
+    <div class="absolute left-5 top-0 bottom-0 w-px -z-10 bg-gradient-to-b from-transparent via-[#D0DEF5] to-transparent pointer-events-none"></div>
+
+    <!-- Step 1 -->
+    <button class="group flex gap-8 focus:outline-none transition-all duration-300 text-left w-full mb-16 relative" onclick="changeStep(1)">
+        <div class="shrink-0 relative">
+            <div class="flex transition-all duration-300 z-10 text-base font-normal bg-[#2C56EA] w-10 h-10 rounded-full items-center justify-center text-white font-manrope" id="step-indicator-1" style="">
+                1
+            </div>
+        </div>
+        <div class="pt-1">
+            <h3 class="transition-colors duration-300 text-xl font-medium text-[#2C2C2C] tracking-tight mb-3 font-manrope" id="step-title-1" style="">
+                Create your account
+            </h3>
+            <p class="text-[#2C2C2C] text-base leading-relaxed max-w-md font-light group-hover:text-[#2C2C2C] transition-colors font-manrope" style="">
+                Sign up in seconds using your email or phone number. Secure, fast, and ready for your business.
+            </p>
+        </div>
+    </button>
+
+    <!-- Step 2 -->
+    <button class="group flex gap-8 focus:outline-none transition-all duration-300 text-left w-full mb-16 relative" onclick="changeStep(2)">
+        <div class="relative shrink-0">
+            <div class="flex transition-all duration-300 group-hover:text-[#2C56EA] z-10 text-base font-normal w-10 h-10 rounded-full items-center justify-center text-slate-400 bg-slate-100 font-manrope" id="step-indicator-2" style="">
+                2
+            </div>
+        </div>
+        <div class="pt-1">
+            <h3 class="transition-colors duration-300 group-hover:text-[#2C2C2C] text-xl font-medium text-[#979797] tracking-tight mb-3 font-manrope" id="step-title-2" style="">
+                Setup your inventory
+            </h3>
+            <p class="text-[#979797] text-base leading-relaxed max-w-md font-light group-hover:text-[#2C2C2C] transition-colors font-manrope" style="">
+                Add your products, set prices, and organize categories. Manage your stock levels in real-time.
+            </p>
+        </div>
+    </button>
+
+    <!-- Step 3 -->
+    <button class="group relative flex gap-8 text-left w-full focus:outline-none transition-all duration-300" onclick="changeStep(3)">
+        <div class="relative shrink-0">
+            <div class="flex transition-all duration-300 group-hover:text-[#2C56EA] z-10 text-base font-normal w-10 h-10 rounded-full items-center justify-center text-slate-400 bg-slate-100 font-manrope" id="step-indicator-3" style="">
+                3
+            </div>
+        </div>
+        <div class="pt-1">
+            <h3 id="step-title-3" class="transition-colors duration-300 group-hover:text-[#2C2C2C] font-medium text-[#979797] tracking-tight mb-3 text-xl font-manrope" style="">
+                Track performance
+            </h3>
+            <p class="leading-relaxed group-hover:text-[#2C2C2C] transition-colors text-base font-light text-[#979797] max-w-md font-manrope" style="">
+                Get detailed insights on sales, revenue, and customer growth.
+            </p>
+        </div>
+    </button>
+</div>
+    </div>
+
+    <script class="">
+        function changeStep(stepNumber) {
+            // Update Phone Screens
+            for (let i = 1; i <= 3; i++) {
+                const screen = document.getElementById(`phone-screen-${i}`);
+                if (i === stepNumber) {
+                    screen.classList.remove('opacity-0');
+                    screen.classList.add('opacity-100');
+                } else {
+                    screen.classList.remove('opacity-100');
+                    screen.classList.add('opacity-0');
+                }
+            }
+
+            // Update Step Indicators and Titles
+            for (let i = 1; i <= 3; i++) {
+                const indicator = document.getElementById(`step-indicator-${i}`);
+                const title = document.getElementById(`step-title-${i}`);
+                
+                if (i === stepNumber) {
+                    // Active State
+                    indicator.className = "w-12 h-12 rounded-full border-2 border-[#2C56EA] bg-[#2C56EA] text-white flex items-center justify-center text-lg font-semibold shadow-lg shadow-blue-500/30 transition-all duration-300 z-10 scale-110";
+                    title.classList.remove('text-slate-900');
+                    title.classList.add('text-[#2C56EA]');
+                } else {
+                    // Inactive State
+                    indicator.className = "w-12 h-12 rounded-full border-2 border-slate-200 bg-white text-slate-400 flex items-center justify-center text-lg font-semibold transition-all duration-300 z-10 group-hover:border-[#2C56EA] group-hover:text-[#2C56EA]";
+                    title.classList.remove('text-[#2C56EA]');
+                    title.classList.add('text-slate-900');
+                }
+            }
+        }
+    </script>
+</div></section><section id="features" class="overflow-hidden bg-[#000000] pt-16 pr-4 pb-16 pl-4 relative">
+        <div class="container max-w-[1140px] mr-auto ml-auto">
+            
+            <!-- Heading -->
+            <div class="text-center max-w-3xl mr-auto mb-20 ml-auto">
+            <h2 class="text-[38px] md:text-[40px] lg:text-[48px] leading-[1.1] font-semibold text-gray-50 tracking-tight font-manrope" style="">Track everything in your pocket</h2>
+            <p class="leading-relaxed text-lg font-medium text-gray-400 font-manrope" style="">See your stock, sales, and staff activity in real time — even when you’re not at the shop.</p>
+        </div>
+
+            <!-- Two Column Layout -->
+            <div class="grid lg:grid-cols-[370px_1fr] lg:items-stretch gap-x-12 gap-y-12 items-start">
+                
+                <!-- Left Column: Navigation Tabs -->
+                <div class="flex flex-col space-y-4">
+                    <!-- Tab 1: Inventory -->
+                    <button onclick="switchTab(0)" class="feature-tab group transition-all duration-300 text-left w-full border-transparent border ring-1 rounded-2xl px-5 py-5 hover:bg-white/10 bg-white/10 ring-white/5" id="tab-0">
+                        <h3 class="group-hover:text-white text-2xl font-semibold tracking-tight mb-2 text-white font-manrope" style="">Inventory Management</h3>
+                        <p class="leading-relaxed group-hover:text-neutral-200 transition-colors text-base font-medium text-neutral-400 text-neutral-300 font-manrope" style="">Always know what you have, what’s running low, and what’s finished — before it becomes a problem.</p>
+                    </button>
+
+                    <!-- Tab 2: POS -->
+                    <button onclick="switchTab(1)" class="feature-tab group transition-all duration-300 hover:bg-white/5 text-left bg-transparent w-full border-transparent border rounded-2xl pt-5 pr-5 pb-5 pl-5" id="tab-1">
+                        <h3 class="group-hover:text-white text-2xl font-semibold tracking-tight mb-2 text-white/90 font-manrope" style="">Point of Sale</h3>
+                        <p class="leading-relaxed group-hover:text-neutral-300 transition-colors text-base font-medium text-neutral-500 text-[#979797] font-manrope" style="">Record every sale instantly and see exactly how much you’ve sold — no missing money, no guesswork.</p>
+                    </button>
+
+                    <!-- Tab 3: Analytics -->
+                    <button onclick="switchTab(2)" class="feature-tab group transition-all duration-300 text-left bg-transparent w-full border-transparent border rounded-2xl px-5 py-5 hover:bg-white/5" id="tab-2">
+                        <h3 class="group-hover:text-white text-2xl font-semibold text-white/90 tracking-tight mb-2 font-manrope" style="">Reports &amp; Insights</h3>
+                        <p class="group-hover:text-neutral-300 leading-relaxed transition-colors text-base font-medium text-neutral-500 text-[#979797] font-manrope" style="">See daily sales, best-selling products, and profit clearly — so you make decisions with facts, not assumptions.</p>
+                    </button>
+
+                    <!-- Tab 4: Staff -->
+                    <button onclick="switchTab(3)" id="tab-3" class="feature-tab group transition-all duration-300 text-left bg-transparent w-full border-transparent border rounded-2xl px-5 py-5 hover:bg-white/5">
+                        <h3 class="group-hover:text-white text-2xl font-semibold tracking-tight mb-2 text-white/90 font-manrope" style="">Staff Management</h3>
+                        <p class="group-hover:text-neutral-300 leading-relaxed transition-colors text-base font-medium text-neutral-500 text-[#979797] font-manrope" style="">Control who can sell, who can edit, and who can see reports — reduce mistakes and unnecessary stories.</p>
+                    </button>
+                </div>
+
+                <!-- Right Column: Visual Preview Area -->
+                <div class="overflow-hidden min-h-[500px] bg-neutral-900/20 w-full h-full border-white/5 border rounded-3xl relative" style="background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px); background-size: 24px 24px">
+    
+                    <!-- Preview 1: Inventory -->
+                    <div class="feature-preview flex !transition-all !duration-[700ms] !ease-[cubic-bezier(0.25,1,0.5,1)] !opacity-0 !translate-y-full [&amp;.active]:!opacity-100 [&amp;.active]:!translate-y-0 w-full h-full pt-10 pr-10 pb-10 pl-10 absolute top-0 right-0 bottom-0 left-0 items-center justify-center active" id="preview-0">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6ece2a07-80ac-455a-8ae5-ff5bcc956841_3840w.png" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl" style="filter: drop-shadow(0 0 50px rgba(59, 130, 246, 0.25))" alt="Inventory Preview">
+                    </div>
+
+                    <!-- Preview 2: Point of Sale -->
+                    <div class="feature-preview flex !transition-all !duration-[700ms] !ease-[cubic-bezier(0.25,1,0.5,1)] !opacity-0 !translate-y-full [&amp;.active]:!opacity-100 [&amp;.active]:!translate-y-0 w-full h-full pt-10 pr-10 pb-10 pl-10 absolute top-0 right-0 bottom-0 left-0 items-center justify-center" id="preview-1">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1c7303a1-51e1-4e59-bbbd-24441f89e9cc_800w.png" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl" style="filter: drop-shadow(0 0 50px rgba(168, 85, 247, 0.25))" alt="Point of Sale Preview">
+                    </div>
+
+                    <!-- Preview 3: Analytics -->
+                    <div class="feature-preview flex !transition-all !duration-[700ms] !ease-[cubic-bezier(0.25,1,0.5,1)] !opacity-0 !translate-y-full [&amp;.active]:!opacity-100 [&amp;.active]:!translate-y-0 w-full h-full pt-10 pr-10 pb-10 pl-10 absolute top-0 right-0 bottom-0 left-0 items-center justify-center" id="preview-2">
+                         <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2f2bcd75-d10e-4402-8ea7-5c097ad55149_800w.png" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl" style="filter: drop-shadow(0 0 50px rgba(236, 72, 153, 0.25))" alt="Analytics Preview">
+                    </div>
+
+                    <!-- Preview 4: Staff -->
+                    <div class="feature-preview flex !transition-all !duration-[700ms] !ease-[cubic-bezier(0.25,1,0.5,1)] !opacity-0 !translate-y-full [&amp;.active]:!opacity-100 [&amp;.active]:!translate-y-0 w-full h-full pt-10 pr-10 pb-10 pl-10 absolute top-0 right-0 bottom-0 left-0 items-center justify-center" id="preview-3">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1b210e65-eb56-4370-81d8-ef79eb34bd6d_800w.png" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl" style="filter: drop-shadow(0 0 50px rgba(16, 185, 129, 0.25))" alt="Staff Preview">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section><section class="overflow-hidden bg-neutral-50 border-white/5 border-t pt-24 pb-24 relative" id="pricing">
+    <!-- Ambient Background Elements -->
+    <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent to-transparent opacity-50 via-slate-200" style=""></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-blue-500/5 blur-[100px] rounded-full pointer-events-none"></div>
+
+    <div class="container z-10 max-w-7xl mr-auto ml-auto pr-6 pl-6 relative">
+        <!-- Header Section -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            
+            <h2 class="text-[38px] md:text-[40px] lg:text-[48px] leading-[1.1] font-semibold text-[#1B1B1B] tracking-tight font-manrope" style="">
+                Transparent pricing.
+            </h2>
+            <p class="leading-relaxed text-lg font-medium text-slate-500 max-w-2xl mr-auto ml-auto font-manrope" style="">
+  Start for free and scale as you grow. No hidden fees. Cancel anytime.
+</p>
+
+            <!-- Billing Toggle -->
+            <div class="hidden flex gap-4 mt-10 gap-x-4 gap-y-4 items-center justify-center">
+  <span class="text-sm font-semibold text-slate-600 font-manrope" style="">Monthly</span>
+  <button class="relative w-14 h-8 rounded-full transition-colors duration-300 focus:outline-none bg-slate-200" onclick="this.classList.toggle('bg-[#2C56EA]'); this.classList.toggle('bg-slate-200'); this.querySelector('div').classList.toggle('translate-x-6'); document.querySelectorAll('.price-monthly').forEach(el =&gt; el.classList.toggle('hidden')); document.querySelectorAll('.price-yearly').forEach(el =&gt; el.classList.toggle('hidden'));" style="">
+                    <div class="absolute left-1 top-1 w-6 h-6 rounded-full shadow-sm transform transition-transform duration-300 translate-x-0 bg-white"></div>
+                </button>
+  <span class="text-sm font-semibold flex items-center gap-1.5 text-slate-600 font-manrope" style="">
+                    Yearly <span class="text-[#2C56EA] px-2 py-0.5 rounded-full text-[10px] font-bold border bg-blue-50 border-blue-100 font-manrope" style="">-20%</span>
+  </span>
+</div>
+        </div>
+
+        <!-- Pricing Grid -->
+        <div class="grid lg:grid-cols-3 gap-x-4 gap-y-4 items-start">
+            
+            <!-- Starter Plan -->
+            <div class="group flex flex-col hover:shadow-lg transition-all duration-300 hover:border-slate-300 hover:shadow-slate-200/50 bg-white border-slate-200 border rounded-3xl pt-8 pr-8 pb-8 pl-8 relative shadow-sm gap-x-4 gap-y-4" style="">
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-slate-900 font-manrope" style="">Free</h3>
+                    <p class="text-slate-500 text-sm mt-2 font-medium font-manrope" style="">Perfect for testing the waters.</p>
+                </div>
+                <div class="mb-8 flex items-baseline gap-1">
+                    <span class="text-4xl font-semibold tracking-tight text-slate-900 font-manrope" style="">₦0</span>
+                    <span class="text-slate-500 font-medium font-manrope" style="">/mo</span>
+                </div>
+                <button class="w-full py-3 px-4 font-semibold rounded-xl border transition-all shadow-sm mb-8 flex items-center justify-center gap-2 group-hover:scale-[1.02] bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-slate-300 font-manrope" style="">
+                    <a href="https://play.google.com/store/apps/details?id=com.lynx.jarabiz">Get Started</a>
+                </button>
+                <div class="space-y-4">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-manrope" style="">Features</p>
+                    <ul class="space-y-3 text-sm font-medium text-slate-600" style="">
+                        <li class="flex gap-x-3 gap-y-3 items-start font-manrope" style=""><iconify-icon icon="lucide:check" class="shrink-0 mt-0.5 text-slate-900" width="16" style=""></iconify-icon> Unlimited Products Inventory</li>
+                        <li class="flex items-start gap-3 font-manrope" style=""><iconify-icon icon="lucide:check" class="shrink-0 mt-0.5 text-slate-900" width="16" style=""></iconify-icon> 500 Orders/month</li>
+                        <li class="flex items-start gap-3 font-manrope" style=""><iconify-icon icon="lucide:check" class="shrink-0 mt-0.5 text-slate-900" width="16" style=""></iconify-icon> 1 Store location</li>
+                        <li class="flex items-start gap-3 font-manrope" style=""><iconify-icon icon="lucide:check" class="shrink-0 mt-0.5 text-slate-900" width="16" style=""></iconify-icon> Basic sales reportingh</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Pro Plan (Popular) -->
+            <div class="flex flex-col lg:-mt-4 lg:mb-4 lg:pb-12 lg:scale-105 shadow-slate-900/10 bg-[#1B1B1B] z-10 border-slate-800 border rounded-3xl pt-8 pr-8 pb-8 pl-8 relative shadow-xl scale-100" style="">
+                <div class="absolute top-0 right-0 -mt-3 -mr-3">
+                    <span class="bg-[#2C56EA] text-[10px] font-bold px-3 py-1 rounded-full shadow-lg border uppercase tracking-wider text-white border-white/10 font-manrope" style="">Most Popular</span>
+                </div>
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-white font-manrope" style="">Basic</h3>
+                    <p class="text-sm mt-2 font-medium text-slate-400 font-manrope" style="">For growing businesses needing power.</p>
+                </div>
+                <div class="flex mb-8 gap-x-1 gap-y-1 items-baseline">
+                    <span class="price-monthly text-5xl font-semibold text-white tracking-tight font-manrope" style="">₦9,999</span>
+                    <span class="text-5xl font-semibold tracking-tight price-yearly hidden text-white font-manrope" style="">$24</span>
+                    <span class="font-medium text-slate-400 font-manrope" style="">/mo</span>
+                </div>
+                <button class="transition-all flex hover:scale-[1.02] hover:bg-blue-600 shadow-blue-900/20 font-semibold text-white bg-[#2C56EA] w-full rounded-xl mb-8 pt-3.5 pr-4 pb-3.5 pl-4 shadow-lg gap-x-2 gap-y-2 items-center justify-center font-manrope" style="">
+                    Start Free Trial <iconify-icon icon="lucide:arrow-right" width="16" class=""></iconify-icon>
+                </button>
+                <div class="space-y-4">
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider font-manrope" style="">Everything in Starter, plus</p>
+                    <ul class="space-y-3 text-sm font-medium text-slate-300" style="">
+                        <li class="flex items-start gap-3 font-manrope" style=""><iconify-icon icon="lucide:check" class="text-[#2C56EA] shrink-0 mt-0.5" width="16"></iconify-icon> 8,700 sales/month</li>
+                        <li class="flex items-start gap-3 font-manrope" style=""><iconify-icon icon="lucide:check" class="text-[#2C56EA] shrink-0 mt-0.5" width="16"></iconify-icon> Advanced analytics &amp; forecasting</li>
+                        <li class="flex items-start gap-3 font-manrope" style=""><iconify-icon icon="lucide:check" class="text-[#2C56EA] shrink-0 mt-0.5" width="16"></iconify-icon> Up to 5 store locations</li>
+                        <li class="flex items-start gap-3 font-manrope" style=""><iconify-icon icon="lucide:check" class="text-[#2C56EA] shrink-0 mt-0.5" width="16"></iconify-icon> Priority 24/7 support</li>
+                        
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="group relative flex flex-col p-8 rounded-3xl border shadow-sm hover:shadow-lg transition-all duration-300 bg-white border-slate-200 hover:border-slate-300 hover:shadow-slate-200/50" style="">
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-slate-900 font-manrope" style="">Enterprise</h3>
+                    <p class="text-slate-500 text-sm mt-2 font-medium font-manrope" style="">Custom solutions for large scale.</p>
+                </div>
+                <div class="mb-8 flex items-baseline gap-1">
+                    <span class="text-4xl font-semibold text-slate-900 tracking-tight font-manrope" style="">₦19,999</span>
+                </div>
+                <button class="transition-all flex hover:scale-[1.02] hover:bg-blue-600 shadow-blue-900/20 font-semibold text-white bg-[#2C56EA] w-full rounded-xl mb-8 pt-3.5 pr-4 pb-3.5 pl-4 shadow-lg gap-x-2 gap-y-2 items-center justify-center font-manrope" style="">
+                    Start Free Trial <iconify-icon icon="lucide:arrow-right" width="16" class=""></iconify-icon>
+                </button>
+                <div class="space-y-4">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-manrope" style="">Everything in Pro, plus</p>
+                    <ul class="space-y-3 text-sm font-medium text-slate-600" style="">
+                        <li class="flex items-start gap-3 font-manrope" style=""><iconify-icon icon="lucide:check" class="shrink-0 mt-0.5 text-slate-900" width="16" style=""></iconify-icon> 20,000 sales/month</li>
+                        <li class="flex items-start gap-3 font-manrope" style=""><iconify-icon icon="lucide:check" class="shrink-0 mt-0.5 text-slate-900" width="16" style=""></iconify-icon> Dedicated success manager</li>
+                        <li class="flex items-start gap-3 font-manrope" style=""><iconify-icon icon="lucide:check" class="shrink-0 mt-0.5 text-slate-900" width="16" style=""></iconify-icon> Unlimited Staffs</li>
+                        <li class="flex items-start gap-3 font-manrope" style=""><iconify-icon icon="lucide:check" class="shrink-0 mt-0.5 text-slate-900" width="16" style=""></iconify-icon> Unlimited Location</li>
+                        
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Trust/Logos footer -->
+        <div class="text-center border-slate-200 border-t mt-20 pt-10">
+            <p class="text-sm font-medium mb-6 text-slate-400 font-manrope" style="">Trusted by fast-growing retail brands</p>
+            <div class="flex flex-wrap md:gap-16 opacity-50 mix-blend-multiply grayscale gap-x-8 gap-y-8 items-center justify-center">
+                <div class="flex text-xl font-bold text-slate-800 h-6 items-center font-manrope" style="">ONYX SUPERMARKET</div>
+                <div class="flex text-xl font-bold text-slate-800 h-6 items-center font-manrope" style="">VIVID GAMING EXPERIENCE</div>
+                <div class="flex text-xl font-bold text-slate-800 h-6 items-center font-manrope" style="">WANT-MORE FOODS</div>
+                <div class="flex text-xl font-bold text-slate-800 h-6 items-center font-manrope" style="">HEALTH HAVEN PHARMACY</div>
+            </div>
+        </div>
+    </div>
+</section><section class="bg-gray-50 w-full max-w-7xl mr-auto ml-auto pt-24 pr-4 pb-24 pl-4 space-x-5" id="faq">
+  <div class="grid md:grid-cols-3 md:text-left text-center space-y-6 gap-x-6">
+    <div class="md:col-span-1 space-y-4">
+      <h3 class="text-[38px] md:text-[40px] lg:text-[48px] leading-[1.1] font-semibold text-[#1B1B1B] tracking-tight font-manrope" "="" style="">FAQ</h3>
+          <p class="leading-relaxed text-lg font-medium text-slate-500 font-manrope max-w-2xl mr-auto ml-auto">Everything you need to know before getting started.</p>
+    </div>
+    <div class="md:col-span-2 self-center h-full space-y-3">
+      <details class="group open:ring-black/10 bg-white w-full ring-black/5 ring-1 rounded-xl pt-4 pr-4 pb-4 pl-4 transition-all duration-200">
+  <summary class="flex items-center justify-between cursor-pointer select-none list-none">
+    <span class="text-sm font-medium text-gray-900 font-manrope">Do I need special devices or POS machines?</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" class="lucide lucide-chevron-down w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform duration-200">
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
+  </summary>
+  <p class="text-left text-sm mt-3 text-gray-600 leading-relaxed font-manrope" style="">No.
+    Jarabiz works on your phone, tablet, or computer. If you later want POS hardware, we support that too.</p>
+</details>
+      <details class="group open:ring-black/10 transition-all duration-200 bg-white w-full rounded-xl ring-black/5 ring-1 pt-4 pr-4 pb-4 pl-4">
+  <summary class="flex items-center justify-between cursor-pointer select-none list-none">
+    <span class="text-sm font-medium text-gray-900 font-manrope" style="">Can my staff use it without seeing everything?</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" class="lucide lucide-chevron-down w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform duration-200">
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
+  </summary>
+  <p class="text-left text-sm mt-3 text-gray-600 leading-relaxed font-manrope" style="">Yes.
+    You control who sees what. Cashiers sell. Managers monitor. Owners see everything.</p>
+</details>
+      <details class="group open:ring-black/10 bg-white w-full ring-black/5 ring-1 rounded-xl pt-4 pr-4 pb-4 pl-4 transition-all duration-200">
+  <summary class="flex items-center justify-between cursor-pointer select-none list-none">
+    <span class="text-sm font-medium text-gray-900 font-manrope" style="">Can my staff use it without seeing everything?</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" class="lucide lucide-chevron-down w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform duration-200">
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
+  </summary>
+  <p class="text-left text-sm mt-3 text-gray-600 leading-relaxed font-manrope" style="">Yes.
+    You control who sees what. Cashiers sell. Managers monitor. Owners see everything.</p>
+</details>
+      <details class="group open:ring-black/10 bg-white w-full ring-black/5 ring-1 rounded-xl pt-4 pr-4 pb-4 pl-4 transition-all duration-200">
+  <summary class="flex items-center justify-between cursor-pointer select-none list-none">
+    <span class="text-sm font-medium text-gray-900 font-manrope" style="">What happens if my internet is slow?</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" class="lucide lucide-chevron-down w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform duration-200">
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
+  </summary>
+  <p class="text-left text-sm mt-3 text-gray-600 leading-relaxed font-manrope" style="">Jarabiz is built for Nigerian conditions.
+    Sales sync when connection is available — your data is safe..</p>
+</details>
+    </div>
+  </div>
+</section><section class="overflow-hidden bg-neutral-50 border-white/5 border-t pt-24 pr-4 pb-24 pl-4 relative">
+  <!-- Ambient Background Glow -->
+
+
+  <div class="container z-10 max-w-6xl mr-auto ml-auto relative">
+    <!-- Merged Main Card Container & Grid -->
+    <div class="grid overflow-hidden shadow-blue-900/10 md:pl-25 md:pb-0 md:pt-0 md:pr-0 lg:grid-cols-2 lg:pl-20 lg:pb-0 lg:pt-0 lg:pr-0 z-10 bg-[#2C56EA] border-white/10 border rounded-[24px] pt-0 pr-0 pb-0 pl-0 relative shadow-2xl items-center">
+      <!-- Noise Texture Overlay -->
+
+
+      <!-- Text Content -->
+      <div class="order-2 lg:text-left lg:order-1 md:pb-20 text-center pt-12 pr-4 pb-6 pl-4">
+        <h2 class="md:text-5xl lg:text-6xl leading-[1.1] text-4xl font-medium text-white tracking-tight mb-6 font-manrope" style="">Download
+          Our
+          App Now</h2>
+
+        <p class="mb-10 text-lg font-normal leading-relaxed max-w-md lg:mx-0 text-gray-50 font-manrope" style="">Run, track, and grow your
+          business — all in one place</p>
+
+        <div class="flex flex-row sm:flex-row lg:justify-start gap-x-4 gap-y-4 items-center justify-center">
+          <button class="group flex items-center justify-center min-w-[170px] h-12 gap-3 p-3.5 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8aa7ac19-c4ce-4a56-9010-ba4a05fc32ce_800w.png)] bg-cover bg-center rounded-xl shadow-lg font-normal transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-white/5 text-slate-950 hover:bg-slate-200" style=""></button>
+
+          <button class="group flex items-center justify-center min-w-[170px] h-12 gap-3 p-3.5 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ad581aa7-45f6-40d1-8f7f-ffb171207920_800w.png)] bg-cover bg-center border rounded-xl shadow-lg font-normal transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] bg-white/5 border-white/10 shadow-black/20 text-white hover:bg-white/10"></button>
+        </div>
+      </div>
+
+      <!-- Image Content / 3D Phone Mockup -->
+      <div class="order-2 lg:order-1 min-h-[300px] bg-center w-full h-full bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2de94e58-c7ec-47e0-8070-58202f4186ad_800w.png)] bg-cover">
+      </div>
+    </div>
+  </div>
+</section><section class="overflow-hidden bg-neutral-50 border-slate-200 border-t pt-10 pb-12 relative">
+  <div class="container max-w-7xl mr-auto ml-auto pr-6 pl-6 space-y-5">
+    <div class="flex gap-3 gap-x-3 gap-y-3 items-center justify-center">
+      <a href="https://x.com/jarabizng" class="flex items-center justify-center hover:text-slate-900 hover:border-slate-300 transition-all hover:scale-105 text-slate-500 bg-white w-9 h-9 border-slate-200 border rounded-full shadow-sm">
+        <iconify-icon icon="lucide:twitter" width="16" height="15" style="color: rgb(15, 23, 42);" class=""></iconify-icon>
+      </a>
+      <a href="https://www.instagram.com/llcvatex/" class="flex items-center justify-center hover:text-slate-900 hover:border-slate-300 transition-all hover:scale-105 text-slate-500 bg-white w-9 h-9 border-slate-200 border rounded-full shadow-sm">
+        <iconify-icon icon="lucide:instagram" width="16" height="15" style="color: rgb(0, 0, 0);" class=""></iconify-icon>
+      </a>
+      <a href="#" class="flex items-center justify-center hover:text-slate-900 hover:border-slate-300 transition-all hover:scale-105 text-slate-500 bg-white w-9 h-9 border-slate-200 border rounded-full shadow-sm">
+        <iconify-icon icon="lucide:facebook" width="16" height="15" style="color: rgb(0, 0, 0);" class=""></iconify-icon>
+      </a>
+      <a href="#" class="flex items-center justify-center hover:text-slate-900 hover:border-slate-300 transition-all hover:scale-105 text-slate-500 bg-white w-9 h-9 border-slate-200 border rounded-full shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon="lucide:linkedin" data-lucide="linkedin" data-icon-set="lucide" data-icon-replaced="true" style="color: rgb(0, 0, 0);" class="">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" class=""></path>
+          <rect width="4" height="12" x="2" y="9" class=""></rect>
+          <circle cx="4" cy="4" r="2"></circle>
+        </svg>
+      </a>
+    </div>
+    <div class="flex flex-col md:flex-row text-left border-slate-200/60 border-t items-center justify-between pt-6 gap-y-4">
+      <p class="text-sm font-medium text-neutral-700 font-manrope" style="">
+        © 2026 JaraBiz Inc. All rights reserved.
+      </p>
+      <div class="flex items-center gap-6">
+        <a href="/terms-of-use.html" class="hover:text-neutral-900 transition-all duration-200 ease-in-out inline-block hover:scale-105 active:scale-95 cursor-pointer text-sm font-medium text-neutral-500 font-manrope" style="">Terms
+          of use</a><a href="/privacy-policy.html" class="hover:text-neutral-900 transition-all duration-200 ease-in-out inline-block hover:scale-105 active:scale-95 cursor-pointer text-sm font-medium text-neutral-500 font-manrope" style="">Privacy
+          policy</a>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+    <!-- Script for Tab Switching -->
+    <script class="">
+        let currentTab = 0;
+        const totalTabs = 4;
+        let autoplayInterval;
+
+        function switchTab(index) {
+            currentTab = index;
+
+            // Update Tabs Styling
+            document.querySelectorAll('.feature-tab').forEach((tab, i) => {
+                if (i === index) {
+                    tab.classList.remove('bg-transparent', 'hover:bg-white/5');
+                    tab.classList.add('bg-white/10');
+                    tab.querySelector('h3').classList.add('text-white');
+                    tab.querySelector('p').classList.remove('text-[#979797]');
+                    tab.querySelector('p').classList.add('text-neutral-300');
+                } else {
+                    tab.classList.add('bg-transparent', 'hover:bg-white/5');
+                    tab.classList.remove('bg-white/10');
+                    tab.querySelector('h3').classList.remove('text-white'); // Optional if h3 is always white
+                    tab.querySelector('p').classList.add('text-[#979797]');
+                    tab.querySelector('p').classList.remove('text-neutral-300');
+                }
+            });
+
+            // Update Preview Screens
+            document.querySelectorAll('.feature-preview').forEach(preview => {
+                preview.classList.remove('active');
+            });
+            const activePreview = document.getElementById(`preview-${index}`);
+            if (activePreview) activePreview.classList.add('active');
+        }
+
+        function startAutoplay() {
+            autoplayInterval = setInterval(() => {
+                let next = currentTab + 1;
+                if (next >= totalTabs) next = 0;
+                switchTab(next);
+            }, 5000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            switchTab(0);
+            startAutoplay();
+
+            // Pause on hover
+            const container = document.querySelector('.grid');
+            container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+            container.addEventListener('mouseleave', startAutoplay);
+        });
+    </script>
+
+</body></html>
